@@ -6,8 +6,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+// let COUNT: number;
+// COUNT = 5;
+// COUNT = 4;
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App counter={1} />
   </React.StrictMode>,
 );
