@@ -36,30 +36,14 @@ function MapLeaflet(props: MapProps): JSX.Element {
     const layerGroup = leaflet.layerGroup();
 
     if (map) {
-      // props.offers.forEach((offer) => {
-      //   if (offer.lat && offer.lng) {
 
-      //     const marker = leaflet.marker(
-      //       {
-      //         lat: offer.lat,
-      //         lng: offer.lng,
-      //       },
-      //       {
-      //         icon: (props.selectedPoint === offer) ? currentCustomIcon : defaultCustomIcon,
-      //         opacity: 0.5,
-      //       });
-      //     layerGroup.addLayer(marker);
-      //   }
-      // });
-
-      // layerGroup.addTo(map);
     }
     return () => {
       if (map) {
         layerGroup.remove();
       }
     };
-  }, []);
+  }, [map]);
 
   return (
     <section className="cities__map map" style={{ background: 'pink' }} ref={mapRef}>
