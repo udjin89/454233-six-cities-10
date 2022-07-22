@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import Form from '../../components/form/form';
+import NotFound from '../notfound/notfound';
 import { ArrayOffers, Offer } from '../../types/types';
 
 
@@ -12,9 +13,16 @@ function Property(props: PropsForProperty): JSX.Element {
   // можно найти его в массиве
   const params = useParams();
   const offers = props.offers;
-  const offer: Offer = offers.find((item) => String(item.id) === params.id);
 
-  const { id, isPremium, previewImage, price, title, type, rating, maxAdults } = offer;
+  const offer = offers.find((item) => String(item.id) === params.id);
+
+  console.log(`in -> ${params.id}`);
+
+  if (offer === undefined) {
+    return (<NotFound />);
+  }
+
+  const { id, isPremium, previewImage, price, title, type, rating, maxAdults, bedrooms, goods } = offer;
   return (
 
     <main className="page__main page__main--property">
@@ -91,7 +99,7 @@ function Property(props: PropsForProperty): JSX.Element {
                 {type}
               </li>
               <li className="property__feature property__feature--bedrooms">
-                3 Bedrooms
+                {bedrooms} Bedrooms
               </li>
               <li className="property__feature property__feature--adults">
                 Max {maxAdults} adults
@@ -104,6 +112,7 @@ function Property(props: PropsForProperty): JSX.Element {
             <div className="property__inside">
               <h2 className="property__inside-title">What&apos;s inside</h2>
               <ul className="property__inside-list">
+                <li className="property__inside-item">{goods[0]}</li>
                 <li className="property__inside-item">Wi-Fi</li>
                 <li className="property__inside-item">Washing machine</li>
                 <li className="property__inside-item">Towels</li>

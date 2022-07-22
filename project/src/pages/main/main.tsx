@@ -1,4 +1,5 @@
 import CardList from '../../components/card-list/card-list';
+import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import { ArrayOffers } from '../../types/types';
 
 type PropsForMain = { offers: ArrayOffers };
@@ -84,7 +85,9 @@ function Main(props: PropsForMain): JSX.Element {
 
           </section>
           <div className="cities__right-section">
-            <section className="cities__map map" />
+
+            <MapLeaflet offers={props.offers} />
+
           </div>
         </div>
       </div>

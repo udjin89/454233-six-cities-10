@@ -18,7 +18,7 @@ function Form(props: PropsForm): JSX.Element {
   function changeText(evt: any) {
     evt.preventDefault();
 
-    if (formState.review.length >= 50) {
+    if (evt.target.textLength >= 50) {
 
       setFormState((prevState) => ({
         ...prevState,

@@ -9,7 +9,7 @@ type Offer = {
     name: string
   }
   description: string
-  goods: [string]
+  goods: string[]
   host: {
     avatarUrl: string
     id: number
@@ -17,7 +17,7 @@ type Offer = {
     name: string
   }
   id: number
-  images: [string]
+  images: string[]
   isFavorite: boolean
   isPremium: boolean
   location: {
@@ -34,4 +34,19 @@ type Offer = {
 };
 
 type ArrayOffers = Offer[];
-export type { Offer, ArrayOffers };
+
+type City = {
+  title: string;
+  lat: number;
+  lng: number;
+  zoom: number;
+};
+
+type Point = {
+  title: string;
+  lat: number;
+  lng: number;
+};
+
+type Points = Point[];
+export type { Offer, ArrayOffers, City, Point, Points };
