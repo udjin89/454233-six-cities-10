@@ -6,12 +6,9 @@ type PropsForCard = { offer: Offer };
 
 function Card(props: PropsForCard): JSX.Element {
   const { id, isPremium, previewImage, price, title, type, rating } = props.offer;
-  // console.log('----');
-  // console.log(props.offer);
-  // console.log('***');
   //Добавим хук состояния, в нем храним id карточки на которую навели курсор
+  // eslint-disable-next-line
   const [isHover, setHover] = useState(0);
-
   return (
 
     <article className="cities__card place-card" onMouseEnter={(evt) => { setHover(id); }} onMouseLeave={() => setHover(0)}>
@@ -24,7 +21,7 @@ function Card(props: PropsForCard): JSX.Element {
             src={previewImage}
             width={260}
             height={200}
-            alt="Place image"
+            alt="Place "
           />
         </Link>
       </div>

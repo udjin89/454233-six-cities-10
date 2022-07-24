@@ -1,5 +1,5 @@
 import { useState } from 'react';
-type PropsForm = {};
+type PropsForm = any;
 
 function Form(props: PropsForm): JSX.Element {
 
@@ -38,10 +38,6 @@ function Form(props: PropsForm): JSX.Element {
     }
 
   }
-  // console.log(`changeValue: ${formState.rating}`);
-  // console.log('----');
-  // console.log(props.offer);
-  // console.log('***');
 
 
   return (
@@ -141,7 +137,6 @@ function Form(props: PropsForm): JSX.Element {
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        defaultValue={''}
         value={formState.review}
         onChange={changeText}
       />

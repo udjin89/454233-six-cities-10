@@ -1,5 +1,5 @@
 
-import { ArrayOffers, Offer } from '../../types/types';
+import { ArrayOffers } from '../../types/types';
 import FavoritesListByCity from '../favorites-list-city/favorites-list-city';
 
 type PropsForFavoritesList = { offers: ArrayOffers };
@@ -7,18 +7,15 @@ type PropsForFavoritesList = { offers: ArrayOffers };
 function FavoritesList(props: PropsForFavoritesList): JSX.Element {
 
   const favoritesOffers: ArrayOffers = props.offers;
-  // console.log('----');
-  // console.log(props.offer);
-  // console.log('***');
-  //
+
 
   // let arrayFavoritesCity;
   const getArrayByCity = favoritesOffers.reduce((prev, cur) => {
     // в idx возвращается индекс первого наиденого элемента, иначе -1
     // console.log(`prev ${prev}`);
     const idx = prev.findIndex((elem) => {
-      // console.log(elem);
-      return elem[0].city.name === cur.city.name;
+      // eslint-disable-next-line
+      elem[0].city.name === cur.city.name;
     });
     if (idx !== -1) { // если элемент наиден
       prev[idx].push(cur);

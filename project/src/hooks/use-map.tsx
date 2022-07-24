@@ -1,7 +1,7 @@
-import { useEffect, useState, MutableRefObject } from 'react';
+import { useEffect, useState } from 'react';
 import leaflet from 'leaflet';
 
-function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: any) {
+function useMap(mapRef: any, city: any) {
   // хук состояния
   const [map, setMap] = useState<leaflet.Map | null>(null);
 
@@ -26,7 +26,6 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: any) {
       setMap(instance);
     }
   }, [mapRef, map, city]);
-  console.log(map);
   return map;
 }
 

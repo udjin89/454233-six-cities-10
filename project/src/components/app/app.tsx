@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
-import { Offer, ArrayOffers } from '../../types/types';
+import { ArrayOffers } from '../../types/types';
 import Main from '../../pages/main/main';
 import Layout from '../layout/layout';
 import Favorites from '../../pages/favorites/favorites';
