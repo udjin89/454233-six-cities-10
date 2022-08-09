@@ -1,6 +1,35 @@
-import Card from '../../components/card/card';
+import CardList from '../../components/card-list/card-list';
+import MapLeaflet from '../../components/map-leaflet/map-leaflet';
+import { useState } from 'react';
+import { ArrayOffers, Point, Offer, Points } from '../../types/types';
 
-function Main(props: { counter: number }): JSX.Element {
+type PropsForMain = { offers: ArrayOffers };
+
+function Main(props: PropsForMain): JSX.Element {
+
+  const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
+
+  const points: Points = props.offers.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
+
+  const onListItemHover = (listItemName: any) => {
+    const currentPoint1 = props.offers.find((point) => point === listItemName);
+
+    if (currentPoint1) {
+      const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
+      setSelectedPoint(currentPoint);
+    }
+    else { setSelectedPoint(currentPoint1); }
+  };
+
+  const centerCity = {
+    title: props.offers[0].city.name,
+    latitude: props.offers[0].city.location.latitude,
+    longitude: props.offers[0].city.location.longitude,
+    zoom: props.offers[0].city.location.zoom,
+  };
+
+  // const offersForCity = props.offers.filter();
+
   return (
 
     <main className="page__main page__main--index">
@@ -45,7 +74,7 @@ function Main(props: { counter: number }): JSX.Element {
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">312 places to stay in Amsterdam {props.counter}</b>
+            <b className="places__found">312 places to stay in Amsterdam</b>
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
               <span className="places__sorting-type" tabIndex={0}>
@@ -72,16 +101,14 @@ function Main(props: { counter: number }): JSX.Element {
                 </li>
               </ul>
             </form>
-            <div className="cities__places-list places__list tabs__content">
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-            </div>
+
+            <CardList offers={props.offers} onListItemHover={onListItemHover} />
+
           </section>
           <div className="cities__right-section">
-            <section className="cities__map map" />
+
+            <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
+
           </div>
         </div>
       </div>
