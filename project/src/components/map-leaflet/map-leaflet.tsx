@@ -4,7 +4,7 @@ import leaflet from 'leaflet';
 import { Icon, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
-import { ArrayOffers, Offer, Points, Point, City } from '../../types/types';
+import { Points, Point, City } from '../../types/types';
 
 type MapProps = {
   centerCity: City;
