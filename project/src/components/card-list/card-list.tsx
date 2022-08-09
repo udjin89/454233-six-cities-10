@@ -1,15 +1,16 @@
 import Card from '../../components/card/card';
 import { ArrayOffers } from '../../types/types';
 
-type PropsForCardList = { offers: ArrayOffers };
+
+type PropsForCardList = {
+  offers: ArrayOffers,
+  onListItemHover: (listItemName: string) => void;
+};
 
 function CardList(props: PropsForCardList): JSX.Element {
 
-  // console.log('*cardlist**');
-  // console.log(props.offers);
-  // console.log('***');
+  const { offers, onListItemHover } = props;
 
-  const offers: ArrayOffers = props.offers;
   return (
 
     <div className="cities__places-list places__list tabs__content">
@@ -17,7 +18,7 @@ function CardList(props: PropsForCardList): JSX.Element {
       {offers.map((item) => {
         //делаем ключ для карточки из id
         const keyValue = item.id;
-        return (<Card key={keyValue} offer={item} />);
+        return (<Card key={keyValue} offer={item} onListItemHover={onListItemHover} />);
       })}
 
     </div>

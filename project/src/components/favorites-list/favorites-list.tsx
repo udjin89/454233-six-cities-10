@@ -1,7 +1,7 @@
 
 import { ArrayOffers } from '../../types/types';
 import FavoritesListByCity from '../favorites-list-city/favorites-list-city';
-
+/* eslint-disable */
 type PropsForFavoritesList = { offers: ArrayOffers };
 
 function FavoritesList(props: PropsForFavoritesList): JSX.Element {

@@ -34,7 +34,7 @@ const offers = [
     'previewImage': 'img/apartment-01.jpg',
     'price': 1204,
     'rating': 3.5,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '0Beautiful & luxurious studio at great location1',
     'type': 'apartment'
   },
   {
@@ -72,7 +72,7 @@ const offers = [
     'previewImage': 'img/room.jpg',
     'price': 444,
     'rating': 1.8,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '1Beautiful & luxurious studio at great location',
     'type': 'apartment'
   },
   {
@@ -110,7 +110,7 @@ const offers = [
     'previewImage': 'img/apartment-02.jpg',
     'price': 222,
     'rating': 4,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '2Beautiful & luxurious studio at great location',
     'type': 'apartment'
   },
   {
@@ -140,15 +140,15 @@ const offers = [
     'isFavorite': true,
     'isPremium': false,
     'location': {
-      'latitude': 52.35514938496378,
-      'longitude': 4.673877537499948,
+      'latitude': 52.35544938496378,
+      'longitude': 4.673477537499948,
       'zoom': 8
     },
     'maxAdults': 4,
     'previewImage': 'img/apartment-02.jpg',
     'price': 120,
     'rating': 2.2,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '4Beautiful & luxurious studio at great location',
     'type': 'apartment'
   },
   {
@@ -186,7 +186,7 @@ const offers = [
     'previewImage': 'img/apartment-02.jpg',
     'price': 222,
     'rating': 4,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '5Beautiful & luxurious studio at great location',
     'type': 'apartment'
   },
   {
@@ -224,7 +224,7 @@ const offers = [
     'previewImage': 'img/apartment-02.jpg',
     'price': 222,
     'rating': 4,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '7Beautiful & luxurious studio at great location',
     'type': 'apartment'
   },
   {
@@ -262,7 +262,7 @@ const offers = [
     'previewImage': 'img/apartment-02.jpg',
     'price': 77777,
     'rating': 4,
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': '77Beautiful & luxurious studio at great location',
     'type': 'apartment'
   },
 ];

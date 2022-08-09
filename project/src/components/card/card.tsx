@@ -1,17 +1,38 @@
 import { Offer } from '../../types/types';
-import { useState } from 'react';
+// import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 
-type PropsForCard = { offer: Offer };
+type PropsForCard = {
+  offer: Offer;
+  onListItemHover: (listItemName: any) => void;
+};
 
 function Card(props: PropsForCard): JSX.Element {
-  const { id, isPremium, previewImage, price, title, type, rating } = props.offer;
-  //Добавим хук состояния, в нем храним id карточки на которую навели курсор
-  // eslint-disable-next-line
-  const [isHover, setHover] = useState(0);
+
+  const { onListItemHover, offer } = props;
+  const { id, isPremium, previewImage, price, title, type, rating } = offer;
+
+  // const listItemHoverHandler = (event: MouseEvent<HTMLElement>, isLeave) => {
+  //   event.preventDefault();
+  //   onListItemHover(title);
+  // };
+
+  function changeHover(state: boolean) {
+    // setHover(state);
+    // console.log(evt.target);
+    if (state) {
+      // console.log(props.offer);
+      onListItemHover(offer);
+    }
+    else {
+      props.onListItemHover(undefined);
+    }
+  }
+
+
   return (
 
-    <article className="cities__card place-card" onMouseEnter={(evt) => { setHover(id); }} onMouseLeave={() => setHover(0)}>
+    <article className="cities__card place-card" onMouseEnter={(evt) => { changeHover(true); }} onMouseLeave={() => changeHover(false)}>
 
       {isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
       <div className="cities__image-wrapper place-card__image-wrapper">

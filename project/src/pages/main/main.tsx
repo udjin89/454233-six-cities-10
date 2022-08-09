@@ -1,14 +1,35 @@
 import CardList from '../../components/card-list/card-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
-import { ArrayOffers } from '../../types/types';
+import { useState } from 'react';
+import { ArrayOffers, Point, Offer, Points } from '../../types/types';
 
 type PropsForMain = { offers: ArrayOffers };
 
 function Main(props: PropsForMain): JSX.Element {
 
-  // console.log('***');
-  // console.log(props.offers);
-  // console.log('***');
+  const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
+
+  const points: Points = props.offers.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
+
+  const onListItemHover = (listItemName: any) => {
+    const currentPoint1 = props.offers.find((point) => point === listItemName);
+
+    if (currentPoint1) {
+      const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
+      setSelectedPoint(currentPoint);
+    }
+    else { setSelectedPoint(currentPoint1); }
+  };
+
+  const centerCity = {
+    title: props.offers[0].city.name,
+    latitude: props.offers[0].city.location.latitude,
+    longitude: props.offers[0].city.location.longitude,
+    zoom: props.offers[0].city.location.zoom,
+  };
+
+  // const offersForCity = props.offers.filter();
+
   return (
 
     <main className="page__main page__main--index">
@@ -81,12 +102,12 @@ function Main(props: PropsForMain): JSX.Element {
               </ul>
             </form>
 
-            <CardList offers={props.offers} />
+            <CardList offers={props.offers} onListItemHover={onListItemHover} />
 
           </section>
           <div className="cities__right-section">
 
-            <MapLeaflet offers={props.offers} />
+            <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
 
           </div>
         </div>

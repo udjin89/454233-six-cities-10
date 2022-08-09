@@ -37,15 +37,15 @@ type ArrayOffers = Offer[];
 
 type City = {
   title: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   zoom: number;
 };
 
 type Point = {
   title: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 };
 
 type Points = Point[];
