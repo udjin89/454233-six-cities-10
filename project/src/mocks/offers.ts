@@ -7,9 +7,9 @@ const offers = [
         'longitude': 4.885168,
         'zoom': 10
       },
-      'name': 'Amsterdam'
+      'name': 'Paris'
     },
-    'description': ' lightness of Amsterdam.',
+    'description': ' lightness of Amsterdam.ParisParisParis',
     'goods': [
       'Heating'
     ],
@@ -34,7 +34,7 @@ const offers = [
     'previewImage': 'img/apartment-01.jpg',
     'price': 1204,
     'rating': 3.5,
-    'title': '0Beautiful & luxurious studio at great location1',
+    'title': '0Paris & luxurious studio at great location1',
     'type': 'apartment'
   },
   {
