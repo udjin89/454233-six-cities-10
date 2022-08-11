@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import useMap from '../../hooks/use-map';
-import leaflet from 'leaflet';
 import { Icon, Marker } from 'leaflet';
+import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import { Points, Point, City } from '../../types/types';
@@ -32,6 +32,9 @@ function MapLeaflet(props: MapProps): JSX.Element {
   const map = useMap(mapRef, centerCity);
 
   useEffect(() => {
+
+    const layerGroup = leaflet.layerGroup();
+
     if (map) {
       points.forEach((point) => {
         const marker = new Marker({
@@ -44,10 +47,16 @@ function MapLeaflet(props: MapProps): JSX.Element {
             selectedPoint !== undefined && point.title === selectedPoint.title
               ? currentCustomIcon
               : defaultCustomIcon
-          )
-          .addTo(map);
+          );
+        layerGroup.addLayer(marker);
       });
+      layerGroup.addTo(map);
     }
+    return () => {
+      if (map) {
+        layerGroup.remove();
+      }
+    };
   }, [map, points, selectedPoint]);
 
   return (

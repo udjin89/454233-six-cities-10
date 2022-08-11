@@ -12,16 +12,11 @@ function Card(props: PropsForCard): JSX.Element {
   const { onListItemHover, offer } = props;
   const { id, isPremium, previewImage, price, title, type, rating } = offer;
 
-  // const listItemHoverHandler = (event: MouseEvent<HTMLElement>, isLeave) => {
-  //   event.preventDefault();
-  //   onListItemHover(title);
-  // };
 
   function changeHover(state: boolean) {
-    // setHover(state);
-    // console.log(evt.target);
+
     if (state) {
-      // console.log(props.offer);
+
       onListItemHover(offer);
     }
     else {

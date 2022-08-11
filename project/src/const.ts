@@ -20,3 +20,12 @@ export const MONTH = ['January',
   'October',
   'November',
   'December'];
+
+export const CITY_LIST = [
+  'Paris',
+  'Cologne',
+  'Brussels',
+  'Amsterdam',
+  'Hamburg',
+  'Dusseldorf',
+];
