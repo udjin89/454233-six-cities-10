@@ -32,7 +32,9 @@ function useMap(
 
       setMap(instance);
       isRenderedRef.current = true;
+
     }
+
   }, [mapRef, centerCity]);
 
   return map;

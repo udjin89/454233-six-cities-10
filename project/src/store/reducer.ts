@@ -1,19 +1,27 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { offers } from '../mocks/offers';
 import { ArrayOffers } from '../types/types';
-import { changeCity, putListOffers, putSortOffers, } from './action';
+import { changeCity, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus } from './action';
 import { filtredOffersByCity } from '../utils/utils';
+import { AuthorizationStatus } from '../const';
+
 
 type InitialState = {
-  city: string,
-  list: ArrayOffers,
+  city: string | undefined,
   offers: ArrayOffers,
+  originOffers: ArrayOffers,
+  authorizationStatus: AuthorizationStatus,
+  isDataLoaded: boolean,
+  error: string | null,
+
 };
 
 const initialState: InitialState = {
   city: 'Paris',
-  list: offers,
   offers: [],
+  originOffers: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
+  isDataLoaded: false,
+  error: null,
 };
 
 // reducer - функция
@@ -28,12 +36,25 @@ const reducer = createReducer(initialState, (builder) => {
     })
     //Действие для заполнения списка предложений должно поместить в хранилище все предложения по аренде
     .addCase(putListOffers, (state, payload) => {
-      state.list = filtredOffersByCity(offers, state.city);
+      const { offers, city } = state;
+
+      state.offers = filtredOffersByCity(offers, city);
     })
     //Действие для перерисовки отсортированного списка предложений
     .addCase(putSortOffers, (state, payload) => {
-      state.list = payload.payload;
-
+      state.offers = payload.payload;
+    })
+    .addCase(loadOffers, (state, payload) => {
+      state.originOffers = payload.payload;
+    })
+    .addCase(requireAuthorization, (state, payload) => {
+      state.authorizationStatus = payload.payload;
+    })
+    .addCase(setError, (state, payload) => {
+      state.error = payload.payload;
+    })
+    .addCase(setDataLoadedStatus, (state, payload) => {
+      state.isDataLoaded = payload.payload;
     });
 });
 

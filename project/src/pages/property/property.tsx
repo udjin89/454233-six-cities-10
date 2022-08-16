@@ -4,18 +4,20 @@ import NotFound from '../notfound/notfound';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import { ArrayOffers } from '../../types/types';
 import { reviewsLIst } from '../../mocks/review';
+import { useAppSelector } from '../../hooks';
 
-type PropsForProperty = { offers: ArrayOffers };
-
-function Property(props: PropsForProperty): JSX.Element {
+function Property(): JSX.Element {
 
   //вызов хука useParams вернёт объект, среди ключей которого будет id (из пропа path)
   //в нём и будет содержаться id запрошенного предложения. Зная, id
   // можно найти его в массиве
   const params = useParams();
-  const offers = props.offers;
+  //заглушка ниже
+  const offers = useAppSelector((state) => state.offers);
+  console.log(offers);
 
   const offer = offers.find((item) => String(item.id) === params.id);
+  // console.log(`${offer} : id = ${offer.id} param id = ${params.id}`);
 
   if (offer === undefined) {
     return (<NotFound />);

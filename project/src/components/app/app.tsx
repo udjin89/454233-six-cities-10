@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
-import { ArrayOffers } from '../../types/types';
+import { useAppSelector } from '../../hooks';
 import Main from '../../pages/main/main';
 import Layout from '../layout/layout';
 import Favorites from '../../pages/favorites/favorites';
@@ -9,14 +9,22 @@ import Property from '../../pages/property/property';
 import NotFound from '../../pages/notfound/notfound';
 import PrivateRoute from '../private-route/private-route';
 import LayoutFooter from '../layout/layout-footer';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
-type PropsForMyApp = { offer: ArrayOffers };
 //функция возвращает jsx элемент
-function App(props: PropsForMyApp): JSX.Element {
+function App(): JSX.Element {
 
-  // console.log(props.offer);
-  //Записываю массив предложений в переменную из пропса
-  const offers: ArrayOffers = props.offer;
+
+  const { authorizationStatus, isDataLoaded } = useAppSelector((state) => state);
+
+  const isCheckedAuth = (): boolean =>
+    authorizationStatus === AuthorizationStatus.Unknown;
+
+  if (isCheckedAuth() || isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     //оборачиваем для работы навигации из реакта
@@ -29,13 +37,13 @@ function App(props: PropsForMyApp): JSX.Element {
 
         <Route path='/' element={<Layout />}>
 
-          <Route index element={<Main offers={offers} />} />
+          <Route index element={<Main />} />
 
           <Route path='favorites' element={<LayoutFooter />}>
 
             <Route index element={
               <PrivateRoute hasAccess={AuthorizationStatus.Auth}>
-                <Favorites offers={offers} />
+                <Favorites />
               </PrivateRoute>
             }
             />
@@ -43,8 +51,8 @@ function App(props: PropsForMyApp): JSX.Element {
           </Route>
 
           <Route path='offer'>
-            <Route index element={<Property offers={offers} />} />
-            <Route path=':id' element={<Property offers={offers} />} />
+            <Route index element={<Property />} />
+            <Route path=':id' element={<Property />} />
           </Route>
 
         </Route>

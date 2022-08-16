@@ -3,18 +3,24 @@ import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import CityList from '../../components/city-list/city-list';
 import Sort from '../../components/sort/sort';
 import { useState } from 'react';
-import { ArrayOffers, Point, Offer, Points } from '../../types/types';
+import { Point, Offer, Points } from '../../types/types';
 import { CITY_LIST } from '../../const';
 import { useAppSelector } from '../../hooks';
+import { filtredOffersByCity } from '../../utils/utils';
 
-type PropsForMain = { offers: ArrayOffers };
-
-function Main(props: PropsForMain): JSX.Element {
+function Main(): JSX.Element {
 
   const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
 
+  const currentCity = useAppSelector((state) => state.city);
+  const originListOffers = useAppSelector((state) => state.originOffers);
+
+  const currentListCity = filtredOffersByCity(originListOffers, currentCity);
+
+  const countOffersCity = currentListCity.length;
+
   const onListItemHover = (listItemName: any) => {
-    const currentPoint1 = props.offers.find((point) => point === listItemName);
+    const currentPoint1 = currentListCity.find((point) => point === listItemName);
 
     if (currentPoint1) {
       const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
@@ -23,17 +29,11 @@ function Main(props: PropsForMain): JSX.Element {
     else { setSelectedPoint(currentPoint1); }
   };
 
-
-  const currentCity = useAppSelector((state) => state.city);
-  const currentListCity = useAppSelector((state) => state.list);
-  const countOffersCity = currentListCity.length;
-  const originListOffers = props.offers;
-
   const centerCity = {
-    title: props.offers[0].city.name,
-    latitude: props.offers[0].city.location.latitude,
-    longitude: props.offers[0].city.location.longitude,
-    zoom: props.offers[0].city.location.zoom,
+    title: currentListCity[0].city.name,
+    latitude: currentListCity[0].city.location.latitude,
+    longitude: currentListCity[0].city.location.longitude,
+    zoom: currentListCity[0].city.location.zoom,
   };
 
   const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
@@ -48,23 +48,42 @@ function Main(props: PropsForMain): JSX.Element {
 
         </section>
       </div>
-      <div className="cities">
-        <div className="cities__places-container container">
-          <section className="cities__places places">
-            <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{countOffersCity} places to stay in {currentCity}</b>
-
-            <Sort offers={currentListCity} originListOffers={originListOffers}></Sort>
-            <CardList offers={currentListCity} onListItemHover={onListItemHover} />
-
-          </section>
-          <div className="cities__right-section">
-
-            <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
-
+      {
+        !countOffersCity ?
+          <div className="cities">
+            <div className="cities__places-container cities__places-container--empty container">
+              <section className="cities__no-places">
+                <div className="cities__status-wrapper tabs__content">
+                  <b className="cities__status">No places to stay available</b>
+                  <p className="cities__status-description">
+                    We could not find any property available at the moment in {currentCity}
+                  </p>
+                </div>
+              </section>
+              <div className="cities__right-section"></div>
+            </div>
           </div>
-        </div>
-      </div>
+          :
+          <div className="cities">
+            <div className="cities__places-container container">
+
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{countOffersCity} places to stay in {currentCity}</b>
+
+                <Sort offers={currentListCity} originListOffers={originListOffers}></Sort>
+                <CardList offers={currentListCity} onListItemHover={onListItemHover} />
+
+              </section>
+              <div className="cities__right-section">
+
+                <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
+
+              </div>
+            </div>
+          </div>
+      }
+
     </main>
 
   );
