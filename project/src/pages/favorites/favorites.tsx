@@ -1,11 +1,14 @@
 import FavoritesList from '../../components/favorites-list/favorites-list';
-import { ArrayOffers } from '../../types/types';
+import { useAppSelector } from '../../hooks';
 
-type PropsForFavorites = { offers: ArrayOffers };
 
-function Favorites(props: PropsForFavorites): JSX.Element {
+function Favorites(): JSX.Element {
   // console.log(props.offers.length);
-  if (!props.offers.length) {
+
+  //заглушка ниже
+  const offers = useAppSelector((state) => state.offers);
+
+  if (!offers.length) {
     return (
       <main className="page__main page__main--favorites page__main--favorites-empty">
         <div className="page__favorites-container container">
@@ -29,7 +32,7 @@ function Favorites(props: PropsForFavorites): JSX.Element {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <FavoritesList offers={props.offers} />
+            <FavoritesList offers={offers} />
           </section>
         </div>
       </main>

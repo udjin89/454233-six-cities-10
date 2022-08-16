@@ -8,6 +8,7 @@ import { AuthorizationStatus } from '../const';
 type InitialState = {
   city: string | undefined,
   offers: ArrayOffers,
+  originOffers: ArrayOffers,
   authorizationStatus: AuthorizationStatus,
   isDataLoaded: boolean,
   error: string | null,
@@ -17,6 +18,7 @@ type InitialState = {
 const initialState: InitialState = {
   city: 'Paris',
   offers: [],
+  originOffers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
   error: null,
@@ -43,7 +45,7 @@ const reducer = createReducer(initialState, (builder) => {
       state.offers = payload.payload;
     })
     .addCase(loadOffers, (state, payload) => {
-      state.offers = payload.payload;
+      state.originOffers = payload.payload;
     })
     .addCase(requireAuthorization, (state, payload) => {
       state.authorizationStatus = payload.payload;

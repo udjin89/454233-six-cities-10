@@ -3,18 +3,24 @@ import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import CityList from '../../components/city-list/city-list';
 import Sort from '../../components/sort/sort';
 import { useState } from 'react';
-import { ArrayOffers, Point, Offer, Points } from '../../types/types';
+import { Point, Offer, Points } from '../../types/types';
 import { CITY_LIST } from '../../const';
 import { useAppSelector } from '../../hooks';
+import { filtredOffersByCity } from '../../utils/utils';
 
-type PropsForMain = { offers: ArrayOffers };
-
-function Main(props: PropsForMain): JSX.Element {
+function Main(): JSX.Element {
 
   const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
 
+  const currentCity = useAppSelector((state) => state.city);
+  const originListOffers = useAppSelector((state) => state.originOffers);
+
+  const currentListCity = filtredOffersByCity(originListOffers, currentCity);
+
+  const countOffersCity = currentListCity.length;
+
   const onListItemHover = (listItemName: any) => {
-    const currentPoint1 = props.offers.find((point) => point === listItemName);
+    const currentPoint1 = currentListCity.find((point) => point === listItemName);
 
     if (currentPoint1) {
       const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
@@ -23,17 +29,11 @@ function Main(props: PropsForMain): JSX.Element {
     else { setSelectedPoint(currentPoint1); }
   };
 
-
-  const currentCity = useAppSelector((state) => state.city);
-  const currentListCity = useAppSelector((state) => state.offers);
-  const countOffersCity = currentListCity.length;
-  const originListOffers = props.offers;
-
   const centerCity = {
-    title: props.offers[0].city.name,
-    latitude: props.offers[0].city.location.latitude,
-    longitude: props.offers[0].city.location.longitude,
-    zoom: props.offers[0].city.location.zoom,
+    title: currentListCity[0].city.name,
+    latitude: currentListCity[0].city.location.latitude,
+    longitude: currentListCity[0].city.location.longitude,
+    zoom: currentListCity[0].city.location.zoom,
   };
 
   const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));

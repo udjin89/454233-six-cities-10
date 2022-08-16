@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
-import { ArrayOffers } from '../../types/types';
 import { useAppSelector } from '../../hooks';
 import Main from '../../pages/main/main';
 import Layout from '../layout/layout';
@@ -12,9 +11,8 @@ import PrivateRoute from '../private-route/private-route';
 import LayoutFooter from '../layout/layout-footer';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
-type PropsForMyApp = { offer: ArrayOffers };
 //функция возвращает jsx элемент
-function App(props: PropsForMyApp): JSX.Element {
+function App(): JSX.Element {
 
 
   const { authorizationStatus, isDataLoaded } = useAppSelector((state) => state);
@@ -28,9 +26,6 @@ function App(props: PropsForMyApp): JSX.Element {
     );
   }
 
-  //Записываю массив предложений в переменную из пропса
-  const offers: ArrayOffers = props.offer;
-
   return (
     //оборачиваем для работы навигации из реакта
     // Layout - содержит общие элементы для всех страниц приложения(например header, footer)
@@ -42,13 +37,13 @@ function App(props: PropsForMyApp): JSX.Element {
 
         <Route path='/' element={<Layout />}>
 
-          <Route index element={<Main offers={offers} />} />
+          <Route index element={<Main />} />
 
           <Route path='favorites' element={<LayoutFooter />}>
 
             <Route index element={
               <PrivateRoute hasAccess={AuthorizationStatus.Auth}>
-                <Favorites offers={offers} />
+                <Favorites />
               </PrivateRoute>
             }
             />
@@ -56,8 +51,8 @@ function App(props: PropsForMyApp): JSX.Element {
           </Route>
 
           <Route path='offer'>
-            <Route index element={<Property offers={offers} />} />
-            <Route path=':id' element={<Property offers={offers} />} />
+            <Route index element={<Property />} />
+            <Route path=':id' element={<Property />} />
           </Route>
 
         </Route>

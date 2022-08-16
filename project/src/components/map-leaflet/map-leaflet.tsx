@@ -36,6 +36,9 @@ function MapLeaflet(props: MapProps): JSX.Element {
     const layerGroup = leaflet.layerGroup();
 
     if (map) {
+
+      map.setView({ lat: centerCity.latitude, lng: centerCity.longitude }, 10);
+
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.latitude,
@@ -57,7 +60,7 @@ function MapLeaflet(props: MapProps): JSX.Element {
         layerGroup.remove();
       }
     };
-  }, [map, points, selectedPoint]);
+  }, [map, points, selectedPoint, centerCity]);
 
   return (
     <section className="cities__map">
