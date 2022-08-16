@@ -25,7 +25,7 @@ function Main(props: PropsForMain): JSX.Element {
 
 
   const currentCity = useAppSelector((state) => state.city);
-  const currentListCity = useAppSelector((state) => state.list);
+  const currentListCity = useAppSelector((state) => state.offers);
   const countOffersCity = currentListCity.length;
   const originListOffers = props.offers;
 
@@ -48,23 +48,42 @@ function Main(props: PropsForMain): JSX.Element {
 
         </section>
       </div>
-      <div className="cities">
-        <div className="cities__places-container container">
-          <section className="cities__places places">
-            <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{countOffersCity} places to stay in {currentCity}</b>
-
-            <Sort offers={currentListCity} originListOffers={originListOffers}></Sort>
-            <CardList offers={currentListCity} onListItemHover={onListItemHover} />
-
-          </section>
-          <div className="cities__right-section">
-
-            <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
-
+      {
+        !countOffersCity ?
+          <div className="cities">
+            <div className="cities__places-container cities__places-container--empty container">
+              <section className="cities__no-places">
+                <div className="cities__status-wrapper tabs__content">
+                  <b className="cities__status">No places to stay available</b>
+                  <p className="cities__status-description">
+                    We could not find any property available at the moment in {currentCity}
+                  </p>
+                </div>
+              </section>
+              <div className="cities__right-section"></div>
+            </div>
           </div>
-        </div>
-      </div>
+          :
+          <div className="cities">
+            <div className="cities__places-container container">
+
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{countOffersCity} places to stay in {currentCity}</b>
+
+                <Sort offers={currentListCity} originListOffers={originListOffers}></Sort>
+                <CardList offers={currentListCity} onListItemHover={onListItemHover} />
+
+              </section>
+              <div className="cities__right-section">
+
+                <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
+
+              </div>
+            </div>
+          </div>
+      }
+
     </main>
 
   );

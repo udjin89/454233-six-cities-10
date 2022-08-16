@@ -64,4 +64,20 @@ type Review = {
 }
 
 type Reviews = Review[];
-export type { Offer, ArrayOffers, City, Point, Points, Review, Reviews };
+
+type AuthData = {
+  login: string;
+  password: string;
+}
+type UserData = {
+  avatarUrl: string
+  email: string
+  id: number
+  isPro: boolean
+  name: string
+  token: string
+}
+
+type ErrorType = unknown;
+
+export type { Offer, ArrayOffers, City, Point, Points, Review, Reviews, AuthData, UserData, ErrorType };

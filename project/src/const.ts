@@ -4,11 +4,14 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
+export const TIMEOUT_SHOW_ERROR = 3000;
+
 export const URL_MARKER_DEFAULT = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
 
 export const URL_MARKER_CURRENT = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
-export const MONTH = ['January',
+export const MONTH = [
+  'January',
   'February',
   'March',
   'April',
@@ -19,7 +22,8 @@ export const MONTH = ['January',
   'September',
   'October',
   'November',
-  'December'];
+  'December'
+];
 
 export const CITY_LIST = [
   'Paris',
@@ -29,3 +33,13 @@ export const CITY_LIST = [
   'Hamburg',
   'Dusseldorf',
 ];
+
+//Маршруты к которым будем обращаться
+//Ресурсы, которые предоставляет сервер
+export enum APIRoute {
+  Offers = '/hotels', // Возвращает массив предложений. Каждое предложение описано в виде объекта.
+  Favorite = '/favorite', //Возвращает массив предложений, добавленных в избранное.
+  Login = '/login', //Возвращает информацию о статусе авторизации пользователя.
+  Logout = '/logout', //Завершает сеанс работы — выход из закрытой части приложения.
+  Comments = '/comments', //Возвращает список комментариев для предложения с идентификатором hotelId
+}

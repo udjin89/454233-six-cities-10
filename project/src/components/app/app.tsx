@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
 import { ArrayOffers } from '../../types/types';
+import { useAppSelector } from '../../hooks';
 import Main from '../../pages/main/main';
 import Layout from '../layout/layout';
 import Favorites from '../../pages/favorites/favorites';
@@ -9,12 +10,24 @@ import Property from '../../pages/property/property';
 import NotFound from '../../pages/notfound/notfound';
 import PrivateRoute from '../private-route/private-route';
 import LayoutFooter from '../layout/layout-footer';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
 type PropsForMyApp = { offer: ArrayOffers };
 //функция возвращает jsx элемент
 function App(props: PropsForMyApp): JSX.Element {
 
-  // console.log(props.offer);
+
+  const { authorizationStatus, isDataLoaded } = useAppSelector((state) => state);
+
+  const isCheckedAuth = (): boolean =>
+    authorizationStatus === AuthorizationStatus.Unknown;
+
+  if (isCheckedAuth() || isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   //Записываю массив предложений в переменную из пропса
   const offers: ArrayOffers = props.offer;
 
