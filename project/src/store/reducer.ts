@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { ArrayOffers, Offer } from '../types/types';
-import { changeCity, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadProperty } from './action';
+import { ArrayOffers, Comments, Offer } from '../types/types';
+import { changeCity, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadProperty, loadComments } from './action';
 import { filtredOffersByCity } from '../utils/utils';
 import { AuthorizationStatus } from '../const';
 
@@ -13,6 +13,7 @@ type InitialState = {
   isDataLoaded: boolean,
   error: string | null,
   property: Offer | null,
+  comments: Comments,
 };
 
 const initialState: InitialState = {
@@ -23,6 +24,7 @@ const initialState: InitialState = {
   isDataLoaded: false,
   error: null,
   property: null,
+  comments: [],
 };
 
 // reducer - функция
@@ -59,6 +61,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadProperty, (state, payload) => {
       state.property = payload.payload;
+    })
+    .addCase(loadComments, (state, payload) => {
+      state.comments = payload.payload;
     });
 });
 

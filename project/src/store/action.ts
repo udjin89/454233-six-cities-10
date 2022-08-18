@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { ArrayOffers, Offer } from '../types/types';
+import { ArrayOffers, Comments, Offer } from '../types/types';
 import { AuthorizationStatus } from '../const';
 
 // const Действие = createAction ('Название_действия');
@@ -22,3 +22,6 @@ export const setDataLoadedStatus = createAction<boolean>('data/LoadedStatus');
 export const redirectToRoute = createAction<string>('redirectToRoute');
 //Действие по загрузке предложения(property)
 export const loadProperty = createAction<Offer>('data/loadProperty');
+//Действие по загрузке коментов
+export const loadComments = createAction<Comments>('data/loadComments');
+

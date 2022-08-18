@@ -37,9 +37,6 @@ function Main(): JSX.Element {
     zoom: currentListCity[0].city.location.zoom,
   };
 
-
-
-
   const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
   return (
@@ -80,9 +77,9 @@ function Main(): JSX.Element {
 
               </section>
               <div className="cities__right-section">
-
-                <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
-
+                <section className="cities__map">
+                  <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
+                </section>
               </div>
             </div>
           </div>

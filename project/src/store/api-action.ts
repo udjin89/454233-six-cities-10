@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 // import { store } from '../store/index';
-import { loadOffers, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty } from './action';
+import { loadOffers, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments } from './action';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
-import { ArrayOffers, AuthData, Offer, UserData } from '../types/types';
+import { ArrayOffers, AuthData, Offer, UserData, Comments } from '../types/types';
 import { AppDispatch, State } from '../types/state';
 import { store } from './index';
 import { toast } from 'react-toastify';
@@ -47,11 +47,31 @@ export const fetchPropertyAction = createAsyncThunk<void, undefined, {
   'data/fetchProperty', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    console.log(`fetchPropertyAction argument = ${_arg}`);
+    // console.log(`fetchPropertyAction argument = ${_arg}`);
+    toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
     dispatch(setDataLoadedStatus(true));
-    dispatch(loadProperty(data));// диспатчим действие по загрузке предложений
+    dispatch(loadProperty(data));
+    dispatch(fetchCommentsAction(_arg));
+    dispatch(setDataLoadedStatus(false));
+  },
+);
+
+export const fetchCommentsAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch, //ссылка на dispatch
+  state: State,
+  extra: AxiosInstance, //что приходит в extra аргументе
+}>(
+  'data/fetchComments', // передаем название действия
+  async (_arg, { dispatch, extra: api }) => {
+    // api - настроенный экземпляр axios
+    // console.log(`fetchPropertyAction argument = ${_arg}`);
+    toast.info(`Load coments, ${_arg}`, { position: 'top-right', });
+    const routeProperty = APIRoute.Comments.concat(`/${_arg}`);
+    const { data } = await api.get<Comments>(routeProperty);
+    dispatch(setDataLoadedStatus(true));
+    dispatch(loadComments(data));
     dispatch(setDataLoadedStatus(false));
   },
 );
@@ -95,7 +115,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
 }>(
   'user/login',
   async ({ login: email, password }, { dispatch, extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
+    const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${_arg}`), { email, password });
     const { token } = data;
     saveToken(token);
     // console.log(data);
@@ -153,5 +173,23 @@ export const clearErrorAction = createAsyncThunk(
       () => store.dispatch(setError(null)),
       TIMEOUT_SHOW_ERROR,
     );
+  },
+);
+
+
+export const sendCommentAction = createAsyncThunk<void, AuthData, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'user/sendComment',
+  async ({ login: email, password }, { dispatch, extra: api }) => {
+    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
+    const { token } = data;
+    saveToken(token);
+    // console.log(data);
+    dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    toast.success(`Hello, ${data.name}`, { position: 'top-center', });
+    dispatch(redirectToRoute('/'));
   },
 );

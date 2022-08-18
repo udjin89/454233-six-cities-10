@@ -2,11 +2,9 @@ import { useParams } from 'react-router-dom';
 import Form from '../../components/form/form';
 import NotFound from '../notfound/notfound';
 import ReviewsList from '../../components/reviews-list/reviews-list';
-import { ArrayOffers } from '../../types/types';
-import { reviewsLIst } from '../../mocks/review';
+import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import { useAppSelector } from '../../hooks';
-import { store } from '../../store';
-import { fetchPropertyAction } from '../../store/api-action';
+import { AuthorizationStatus } from '../../const';
 
 function Property(): JSX.Element {
 
@@ -16,22 +14,18 @@ function Property(): JSX.Element {
   const params = useParams();
   const hotelId = params.id;
   const currentProperty = useAppSelector((state) => state.property);
-  //Запрашиваем информацию по предложению
-  // store.dispatch(fetchPropertyAction(hotelId));
-  console.log(`dispatch Property id = ${hotelId} and ${currentProperty}`);
-  console.log(currentProperty);
-  //заглушка ниже
-  const offers = useAppSelector((state) => state.offers);
-  // console.log(offers);
+  const currentComments = useAppSelector((state) => state.comments);
+  const isAuth = useAppSelector((state) => state.authorizationStatus);
 
-  const offer = offers.find((item) => String(item.id) === params.id);
-  // console.log(`${offer} : id = ${offer.id} param id = ${params.id}`);
+  const centerCity = currentProperty ? currentProperty.location : { latitude: 52.370216, longitude: 4.895168, zoom: 11 };
 
   if (currentProperty === null) {
     return (<NotFound />);
   }
 
-  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods } = currentProperty;
+  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods, host, description } = currentProperty;
+  const { name, avatarUrl, isPro } = host;
+
   return (
 
     <main className="page__main page__main--property">
@@ -121,17 +115,12 @@ function Property(): JSX.Element {
             <div className="property__inside">
               <h2 className="property__inside-title">What&apos;s inside</h2>
               <ul className="property__inside-list">
-                <li className="property__inside-item">{goods[0]}</li>
-                <li className="property__inside-item">Wi-Fi</li>
-                <li className="property__inside-item">Washing machine</li>
-                <li className="property__inside-item">Towels</li>
-                <li className="property__inside-item">Heating</li>
-                <li className="property__inside-item">Coffee machine</li>
-                <li className="property__inside-item">Baby seat</li>
-                <li className="property__inside-item">Kitchen</li>
-                <li className="property__inside-item">Dishwasher</li>
-                <li className="property__inside-item">Cabel TV</li>
-                <li className="property__inside-item">Fridge</li>
+                {
+                  goods.map((item) => {
+                    const keyValue = `${item}-${hotelId}`;
+                    return <li key={keyValue} className="property__inside-item">{item}</li>;
+                  })
+                }
               </ul>
             </div>
             <div className="property__host">
@@ -140,35 +129,30 @@ function Property(): JSX.Element {
                 <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
                   <img
                     className="property__avatar user__avatar"
-                    src="img/avatar-angelina.jpg"
+                    src={avatarUrl}
                     width={74}
                     height={74}
                     alt="Host avatar"
                   />
                 </div>
-                <span className="property__user-name">Angelina</span>
-                <span className="property__user-status">Pro</span>
+                <span className="property__user-name">{name}</span>
+                {isPro ? <span className="property__user-status">Pro</span> : ''}
               </div>
               <div className="property__description">
                 <p className="property__text">
-                  A quiet cozy and picturesque that hides behind a a river by the
-                  unique lightness of Amsterdam. The building is green and from
-                  18th century.
-                </p>
-                <p className="property__text">
-                  An independent House, strategically located between Rembrand
-                  Square and National Opera, but where the bustle of the city
-                  comes to rest in this alley flowery and colorful.
+                  {description}
                 </p>
               </div>
             </div>
             <section className="property__reviews reviews">
-              <ReviewsList reviews={reviewsLIst} />
-              <Form />
+              {currentComments.length ? <ReviewsList reviews={currentComments} /> : ''}
+              {isAuth === AuthorizationStatus.Auth ? <Form /> : ''}
             </section>
           </div>
         </div>
-        <section className="property__map map" />
+        <section className="property__map map" >
+          <MapLeaflet centerCity={centerCity} points={[]} selectedPoint={undefined} />
+        </section>
       </section>
       <div className="container">
         <section className="near-places places">

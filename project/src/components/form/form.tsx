@@ -151,7 +151,6 @@ function Form(props: PropsForm): JSX.Element {
           className="reviews__submit form__submit button"
           type="submit"
           disabled={formState.isDisabled}
-
         >
           Submit
         </button>
