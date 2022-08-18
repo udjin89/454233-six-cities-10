@@ -29,12 +29,16 @@ function Main(): JSX.Element {
     else { setSelectedPoint(currentPoint1); }
   };
 
+
   const centerCity = {
     title: currentListCity[0].city.name,
     latitude: currentListCity[0].city.location.latitude,
     longitude: currentListCity[0].city.location.longitude,
     zoom: currentListCity[0].city.location.zoom,
   };
+
+
+
 
   const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 

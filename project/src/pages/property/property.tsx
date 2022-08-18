@@ -5,6 +5,8 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import { ArrayOffers } from '../../types/types';
 import { reviewsLIst } from '../../mocks/review';
 import { useAppSelector } from '../../hooks';
+import { store } from '../../store';
+import { fetchPropertyAction } from '../../store/api-action';
 
 function Property(): JSX.Element {
 
@@ -12,18 +14,24 @@ function Property(): JSX.Element {
   //в нём и будет содержаться id запрошенного предложения. Зная, id
   // можно найти его в массиве
   const params = useParams();
+  const hotelId = params.id;
+  const currentProperty = useAppSelector((state) => state.property);
+  //Запрашиваем информацию по предложению
+  // store.dispatch(fetchPropertyAction(hotelId));
+  console.log(`dispatch Property id = ${hotelId} and ${currentProperty}`);
+  console.log(currentProperty);
   //заглушка ниже
   const offers = useAppSelector((state) => state.offers);
-  console.log(offers);
+  // console.log(offers);
 
   const offer = offers.find((item) => String(item.id) === params.id);
   // console.log(`${offer} : id = ${offer.id} param id = ${params.id}`);
 
-  if (offer === undefined) {
+  if (currentProperty === null) {
     return (<NotFound />);
   }
 
-  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods } = offer;
+  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods } = currentProperty;
   return (
 
     <main className="page__main page__main--property">

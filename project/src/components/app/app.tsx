@@ -10,6 +10,8 @@ import NotFound from '../../pages/notfound/notfound';
 import PrivateRoute from '../private-route/private-route';
 import LayoutFooter from '../layout/layout-footer';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import HistoryRouter from '../history-route/history-route';
+import browserHistory from '../../browser-history';
 
 //функция возвращает jsx элемент
 function App(): JSX.Element {
@@ -32,7 +34,7 @@ function App(): JSX.Element {
     //
     // index - значит корневой элемент по умолчанию
     // path='*' - значит все пути, которые не заданы
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
 
         <Route path='/' element={<Layout />}>
@@ -42,7 +44,7 @@ function App(): JSX.Element {
           <Route path='favorites' element={<LayoutFooter />}>
 
             <Route index element={
-              <PrivateRoute hasAccess={AuthorizationStatus.Auth}>
+              <PrivateRoute hasAccess={authorizationStatus}>
                 <Favorites />
               </PrivateRoute>
             }
@@ -62,7 +64,7 @@ function App(): JSX.Element {
         <Route path='*' element={<NotFound />} />
 
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
 
   );
 }

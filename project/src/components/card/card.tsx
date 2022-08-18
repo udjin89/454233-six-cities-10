@@ -1,6 +1,8 @@
 import { Offer } from '../../types/types';
 // import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { store } from '../../store';
+import { fetchPropertyAction } from '../../store/api-action';
 
 type PropsForCard = {
   offer: Offer;
@@ -61,7 +63,7 @@ function Card(props: PropsForCard): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`offer/${id}`}>{title}</Link>
+          <Link to={`offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
