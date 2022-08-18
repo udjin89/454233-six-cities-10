@@ -7,6 +7,7 @@ import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
 import { ArrayOffers, AuthData, Offer, UserData } from '../types/types';
 import { AppDispatch, State } from '../types/state';
 import { store } from './index';
+import { toast } from 'react-toastify';
 
 
 //Создаем асинхронное действие с помощью createAsyncThunk
@@ -65,8 +66,9 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   async (_arg, { dispatch, extra: api }) => {
     try {
       const { data } = await api.get(APIRoute.Login);
-      console.log(data);
+      // console.log(data);
       dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      toast.success(`Hello, ${data.name}`, { position: 'top-center', });
     } catch {
       dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     }
@@ -96,8 +98,9 @@ export const loginAction = createAsyncThunk<void, AuthData, {
     const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
     const { token } = data;
     saveToken(token);
-    console.log(data);
+    // console.log(data);
     dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    toast.success(`Hello, ${data.name}`, { position: 'top-center', });
     dispatch(redirectToRoute('/'));
   },
 );
