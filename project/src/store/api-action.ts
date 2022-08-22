@@ -115,7 +115,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
 }>(
   'user/login',
   async ({ login: email, password }, { dispatch, extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${_arg}`), { email, password });
+    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
     const { token } = data;
     saveToken(token);
     // console.log(data);
@@ -184,12 +184,13 @@ export const sendCommentAction = createAsyncThunk<void, AuthData, {
 }>(
   'user/sendComment',
   async ({ login: email, password }, { dispatch, extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
-    const { token } = data;
-    saveToken(token);
+    const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${_arg}`), { email, password });
+
+    // const { token } = data;
+    // saveToken(token);
     // console.log(data);
-    dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    toast.success(`Hello, ${data.name}`, { position: 'top-center', });
-    dispatch(redirectToRoute('/'));
+    // dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    // toast.success(`Hello, ${data.name}`, { position: 'top-center', });
+    // dispatch(redirectToRoute('/'));
   },
 );

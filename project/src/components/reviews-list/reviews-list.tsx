@@ -29,8 +29,6 @@ function ReviewsList(props: PropsReview): JSX.Element {
 
       </ul>
     </Fragment>
-
-
   );
 }
 

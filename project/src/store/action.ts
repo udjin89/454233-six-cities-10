@@ -7,9 +7,9 @@ import { AuthorizationStatus } from '../const';
 //изменение города
 export const changeCity = createAction<string>('changeCity');
 //Действие для заполнения списка предложений должно поместить в хранилище все предложения по аренде
-export const putListOffers = createAction('putListOffers');
+export const putListOffers = createAction<string>('putListOffers');
 //Действие для сортировок
-export const putSortOffers = createAction('putSortOffers');
+export const putSortOffers = createAction<ArrayOffers>('putSortOffers');
 //Действие для загрузки списка предложений
 export const loadOffers = createAction<ArrayOffers>('data/loadOffers');
 //Действие для авторизации

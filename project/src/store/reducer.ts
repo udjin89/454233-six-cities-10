@@ -6,7 +6,7 @@ import { AuthorizationStatus } from '../const';
 
 
 type InitialState = {
-  city: string | undefined,
+  city: string,
   offers: ArrayOffers,
   originOffers: ArrayOffers,
   authorizationStatus: AuthorizationStatus,
