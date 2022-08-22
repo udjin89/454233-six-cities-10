@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
+import { processErrorHandle } from '../services/process-handle-error';
 // import { store } from '../store/index';
-import { loadOffers, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments } from './action';
+import { loadOffers, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby } from './action';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
-import { ArrayOffers, AuthData, Offer, UserData, Comments } from '../types/types';
+import { ArrayOffers, AuthData, Offer, UserData, Comments, CommentData } from '../types/types';
 import { AppDispatch, State } from '../types/state';
 import { store } from './index';
 import { toast } from 'react-toastify';
@@ -54,6 +55,7 @@ export const fetchPropertyAction = createAsyncThunk<void, undefined, {
     dispatch(setDataLoadedStatus(true));
     dispatch(loadProperty(data));
     dispatch(fetchCommentsAction(_arg));
+    dispatch(fetchPropertyNearby(_arg));
     dispatch(setDataLoadedStatus(false));
   },
 );
@@ -177,20 +179,51 @@ export const clearErrorAction = createAsyncThunk(
 );
 
 
-export const sendCommentAction = createAsyncThunk<void, AuthData, {
+export const sendCommentAction = createAsyncThunk<void, CommentData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'user/sendComment',
-  async ({ login: email, password }, { dispatch, extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${_arg}`), { email, password });
-
-    // const { token } = data;
+  async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
+      toast.success(`Load coments SUCCESS, id=${hotelId}`, { position: 'top-right', });
+      fetchCommentsAction(toString(hotelId));
+    }
+    catch (error) {
+      toast.info(`Load coments, ${error}`, { position: 'top-right', });
+    }
     // saveToken(token);
     // console.log(data);
     // dispatch(requireAuthorization(AuthorizationStatus.Auth));
     // toast.success(`Hello, ${data.name}`, { position: 'top-center', });
     // dispatch(redirectToRoute('/'));
+  },
+);
+
+
+export const fetchPropertyNearby = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch, //ссылка на dispatch
+  state: State,
+  extra: AxiosInstance, //что приходит в extra аргументе
+}>(
+  'data/fetchPropertyNearby', // передаем название действия
+  async (_arg, { dispatch, extra: api }) => {
+    // api - настроенный экземпляр axios
+    // console.log(`fetchPropertyAction argument = ${_arg}`);
+
+    const routePropertyNearby = APIRoute.Offers.concat(`/${_arg}/`).concat('nearby');
+    try {
+      const { data } = await api.get<ArrayOffers>(routePropertyNearby);
+      dispatch(setDataLoadedStatus(true));
+      dispatch(loadPropertyNearby(data));
+      dispatch(setDataLoadedStatus(false));
+      toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
+    }
+    catch {
+      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
+      processErrorHandle('error');
+    }
   },
 );

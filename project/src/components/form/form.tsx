@@ -1,7 +1,12 @@
 import { useState } from 'react';
+import { sendCommentAction } from '../../store/api-action';
+import { useAppDispatch } from '../../hooks';
 type PropsForm = any;
 
 function Form(props: PropsForm): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const { hotelId } = props;
 
   const [formState, setFormState] = useState({
     rating: 0,
@@ -15,6 +20,7 @@ function Form(props: PropsForm): JSX.Element {
       rating: value,
     });
   }
+
   function changeText(evt: any) {
     evt.preventDefault();
 
@@ -39,9 +45,20 @@ function Form(props: PropsForm): JSX.Element {
 
   }
 
+  const onSubmit = (comment: string, rating: number) => {
+    dispatch(sendCommentAction({ hotelId, comment, rating }));
+  };
+
+  const handleSubmit = (evt: any) => {
+    evt.preventDefault();
+
+    onSubmit(formState.review, formState.rating);
+
+  };
+
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>

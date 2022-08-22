@@ -25,3 +25,4 @@ export const loadProperty = createAction<Offer>('data/loadProperty');
 //Действие по загрузке коментов
 export const loadComments = createAction<Comments>('data/loadComments');
 
+export const loadPropertyNearby = createAction<ArrayOffers>('data/loadPropertyNearby');

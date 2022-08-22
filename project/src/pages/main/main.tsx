@@ -31,10 +31,10 @@ function Main(): JSX.Element {
 
 
   const centerCity = {
-    title: currentListCity[0].city.name,
-    latitude: currentListCity[0].city.location.latitude,
-    longitude: currentListCity[0].city.location.longitude,
-    zoom: currentListCity[0].city.location.zoom,
+    title: currentListCity[0].city.name || 'Paris',
+    latitude: currentListCity[0].city.location.latitude || 52.370316,
+    longitude: currentListCity[0].city.location.longitude || 4.885168,
+    zoom: currentListCity[0].city.location.zoom || 10,
   };
 
   const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));

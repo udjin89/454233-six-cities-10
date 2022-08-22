@@ -11,7 +11,7 @@ function ReviewsList(props: PropsReview): JSX.Element {
   // console.log(props.reviews);
 
 
-  const reviewsListSort = reviewsList.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  const reviewsListSort = reviewsList;//.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 
   return (
     <Fragment>

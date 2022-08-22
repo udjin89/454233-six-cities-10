@@ -5,6 +5,7 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import { useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
+import { Offer, Points } from '../../types/types';
 
 function Property(): JSX.Element {
 
@@ -15,9 +16,12 @@ function Property(): JSX.Element {
   const hotelId = params.id;
   const currentProperty = useAppSelector((state) => state.property);
   const currentComments = useAppSelector((state) => state.comments);
+  const currentPoints = useAppSelector((state) => state.nearby);
   const isAuth = useAppSelector((state) => state.authorizationStatus);
 
   const centerCity = currentProperty ? currentProperty.location : { latitude: 52.370216, longitude: 4.895168, zoom: 11 };
+
+  const points: Points = currentPoints.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
   if (currentProperty === null) {
     return (<NotFound />);
@@ -146,12 +150,12 @@ function Property(): JSX.Element {
             </div>
             <section className="property__reviews reviews">
               {currentComments.length ? <ReviewsList reviews={currentComments} /> : ''}
-              {isAuth === AuthorizationStatus.Auth ? <Form /> : ''}
+              {isAuth === AuthorizationStatus.Auth ? <Form hotelId={hotelId} /> : ''}
             </section>
           </div>
         </div>
         <section className="property__map map" >
-          <MapLeaflet centerCity={centerCity} points={[]} selectedPoint={undefined} />
+          <MapLeaflet centerCity={centerCity} points={points} selectedPoint={undefined} />
         </section>
       </section>
       <div className="container">

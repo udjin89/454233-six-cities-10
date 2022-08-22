@@ -78,6 +78,11 @@ type UserData = {
   token: string
 }
 
+type CommentData = {
+  hotelId: number,
+  comment: string,
+  rating: number,
+}
 type ErrorType = unknown;
 
-export type { Offer, ArrayOffers, City, Point, Points, Comment, Comments, AuthData, UserData, ErrorType };
+export type { Offer, ArrayOffers, City, Point, Points, Comment, Comments, AuthData, UserData, ErrorType, CommentData };
