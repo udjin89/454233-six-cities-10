@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { processErrorHandle } from '../services/process-handle-error';
 // import { store } from '../store/index';
-import { loadOffers, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby } from './action';
+import { loadOffers, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby } from './action';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
 import { ArrayOffers, AuthData, Offer, UserData, Comments, CommentData } from '../types/types';
@@ -26,21 +26,9 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
     dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
     dispatch(setDataLoadedStatus(false));
   },
-
-  // async () => {
-  //   //передаем функцию
-  //   // выполняем метод get, тип содержимого, которое вернется ArrayOffers
-  //   //и указываем путь к запросу APIRoute.Offers (на сервере к ресурсу)
-  //   try {
-  //     const { data } = await api.get<ArrayOffers>(APIRoute.Offers);
-  //     store.dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
-  //   } catch (error) {
-  //     errorHandle(error);
-  //   }
-  // },
 );
 
-export const fetchPropertyAction = createAsyncThunk<void, undefined, {
+export const fetchPropertyAction = createAsyncThunk<void, number, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -60,21 +48,17 @@ export const fetchPropertyAction = createAsyncThunk<void, undefined, {
   },
 );
 
-export const fetchCommentsAction = createAsyncThunk<void, undefined, {
+export const fetchCommentsAction = createAsyncThunk<void, number, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
 }>(
   'data/fetchComments', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
-    // api - настроенный экземпляр axios
-    // console.log(`fetchPropertyAction argument = ${_arg}`);
     toast.info(`Load coments, ${_arg}`, { position: 'top-right', });
     const routeProperty = APIRoute.Comments.concat(`/${_arg}`);
     const { data } = await api.get<Comments>(routeProperty);
-    dispatch(setDataLoadedStatus(true));
     dispatch(loadComments(data));
-    dispatch(setDataLoadedStatus(false));
   },
 );
 
@@ -97,19 +81,6 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   },
 );
 
-// export const checkAuthAction = createAsyncThunk(
-//   'user/checkAuth',
-//   async () => {
-//     try {
-//       await api.get(APIRoute.Login);
-//       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
-//     } catch (error) {
-//       errorHandle(error);
-//     }
-//   },
-// );
-
-
 export const loginAction = createAsyncThunk<void, AuthData, {
   dispatch: AppDispatch,
   state: State,
@@ -127,20 +98,6 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   },
 );
 
-// export const loginAction = createAsyncThunk(
-//   'user/login',
-//   async ({ login: email, password }: AuthData) => {
-//     try {
-//       const { data: { token } } = await api.post<UserData>(APIRoute.Login, { email, password });
-//       saveToken(token);
-//       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
-//     } catch (error) {
-//       errorHandle(error);
-//       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-//     }
-//   },
-// );
-
 
 export const logoutAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -155,18 +112,6 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   },
 );
 
-// export const logoutAction = createAsyncThunk(
-//   'user/logout',
-//   async () => {
-//     try {
-//       await api.delete(APIRoute.Logout);
-//       dropToken();
-//       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-//     } catch (error) {
-//       errorHandle(error);
-//     }
-//   },
-// );
 
 export const clearErrorAction = createAsyncThunk(
   'clearError',
@@ -188,22 +133,17 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
   async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
     try {
       const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
+      fetchCommentsAction(hotelId);
       toast.success(`Load coments SUCCESS, id=${hotelId}`, { position: 'top-right', });
-      fetchCommentsAction(toString(hotelId));
     }
     catch (error) {
       toast.info(`Load coments, ${error}`, { position: 'top-right', });
     }
-    // saveToken(token);
-    // console.log(data);
-    // dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    // toast.success(`Hello, ${data.name}`, { position: 'top-center', });
-    // dispatch(redirectToRoute('/'));
   },
 );
 
 
-export const fetchPropertyNearby = createAsyncThunk<void, undefined, {
+export const fetchPropertyNearby = createAsyncThunk<void, number, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -224,6 +164,46 @@ export const fetchPropertyNearby = createAsyncThunk<void, undefined, {
     catch {
       // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
+    }
+  },
+);
+
+export const fetchFavorites = createAsyncThunk<void, number, {
+  dispatch: AppDispatch, //ссылка на dispatch
+  state: State,
+  extra: AxiosInstance, //что приходит в extra аргументе
+}>(
+  'data/fetchFavorites', // передаем название действия
+  async (_arg, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<ArrayOffers>(APIRoute.Favorite);
+      dispatch(setDataLoadedStatus(true));
+      dispatch(loadFavorite(data));
+      dispatch(setDataLoadedStatus(false));
+      toast.info(`Load Favorites, id=${_arg}`, { position: 'top-right', });
+    }
+    catch {
+      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
+      processErrorHandle('error');
+    }
+  },
+);
+
+export const addFavorites = createAsyncThunk<void, number, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'user/addFavorites',
+  async (_arg, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.post<Offer>(APIRoute.Favorite.concat(`/${_arg}/1`), {});
+      console.log(data);
+      fetchFavorites(_arg);
+      toast.success(`Add favorite SUCCESS, id=${_arg}`, { position: 'top-right', });
+    }
+    catch (error) {
+      toast.error(`ADD favorite, ${error}`, { position: 'top-right', });
     }
   },
 );

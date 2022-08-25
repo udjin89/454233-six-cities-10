@@ -2,7 +2,7 @@ import CardList from '../../components/card-list/card-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import CityList from '../../components/city-list/city-list';
 import Sort from '../../components/sort/sort';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Point, Offer, Points } from '../../types/types';
 import { CITY_LIST } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -29,12 +29,13 @@ function Main(): JSX.Element {
     else { setSelectedPoint(currentPoint1); }
   };
 
+  if (currentListCity.length === 0) { return <div></div>; }
 
   const centerCity = {
-    title: currentListCity[0].city.name || 'Paris',
-    latitude: currentListCity[0].city.location.latitude || 52.370316,
-    longitude: currentListCity[0].city.location.longitude || 4.885168,
-    zoom: currentListCity[0].city.location.zoom || 10,
+    title: currentListCity[0]?.city.name || 'Paris',
+    latitude: currentListCity[0]?.city.location.latitude || 52.370316,
+    longitude: currentListCity[0]?.city.location.longitude || 4.885168,
+    zoom: currentListCity[0]?.city.location.zoom || 10,
   };
 
   const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));

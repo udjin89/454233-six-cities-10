@@ -2,7 +2,10 @@ import { Offer } from '../../types/types';
 // import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { store } from '../../store';
-import { fetchPropertyAction } from '../../store/api-action';
+import { addFavorites, fetchPropertyAction } from '../../store/api-action';
+import { useAppSelector } from '../../hooks';
+import { Navigate } from 'react-router-dom';
+import { AuthorizationStatus } from '../../const';
 
 type PropsForCard = {
   offer: Offer;
@@ -12,7 +15,9 @@ type PropsForCard = {
 function Card(props: PropsForCard): JSX.Element {
 
   const { onListItemHover, offer } = props;
-  const { id, isPremium, previewImage, price, title, type, rating } = offer;
+  const { id, isPremium, previewImage, price, title, type, rating, isFavorite } = offer;
+
+  const isAuth = useAppSelector((state) => state.authorizationStatus);
 
 
   function changeHover(state: boolean) {
@@ -26,6 +31,16 @@ function Card(props: PropsForCard): JSX.Element {
     }
   }
 
+  function clickHandle() {
+    if (isAuth === AuthorizationStatus.Auth) {
+      store.dispatch(addFavorites(id));
+    }
+    else {
+      console.log('go to login');
+      // <Redirect to='/login' />
+      return <Navigate to={'/login'} />;
+    }
+  }
 
   return (
 
@@ -49,7 +64,7 @@ function Card(props: PropsForCard): JSX.Element {
             <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''} `} type="button" onClick={() => { clickHandle(); }}>
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>

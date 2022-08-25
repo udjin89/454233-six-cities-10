@@ -26,3 +26,5 @@ export const loadProperty = createAction<Offer>('data/loadProperty');
 export const loadComments = createAction<Comments>('data/loadComments');
 
 export const loadPropertyNearby = createAction<ArrayOffers>('data/loadPropertyNearby');
+
+export const loadFavorite = createAction<ArrayOffers>('data/loadFavorite');
