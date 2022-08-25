@@ -14,6 +14,7 @@ function Main(): JSX.Element {
 
   const currentCity = useAppSelector((state) => state.city);
   const originListOffers = useAppSelector((state) => state.originOffers);
+  const offers = useAppSelector((state) => state.offers);
 
   const currentListCity = filtredOffersByCity(originListOffers, currentCity);
 
@@ -73,8 +74,8 @@ function Main(): JSX.Element {
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{countOffersCity} places to stay in {currentCity}</b>
 
-                <Sort offers={currentListCity} originListOffers={originListOffers}></Sort>
-                <CardList offers={currentListCity} onListItemHover={onListItemHover} />
+                <Sort offers={currentListCity} originListOffers={currentListCity}></Sort>
+                <CardList offers={offers} onListItemHover={onListItemHover} />
 
               </section>
               <div className="cities__right-section">
