@@ -2,7 +2,9 @@
 import { Offer } from '../../types/types';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { addFavorites } from '../../store/api-action';
+import { store } from '../../store';
+import { addFavorites, fetchPropertyAction, } from '../../store/api-action';
+
 
 type PropsForFavoritesListItem = { offer: Offer };
 
@@ -22,13 +24,13 @@ function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
     <article className="favorites__card place-card">
       {isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
       <div className="favorites__image-wrapper place-card__image-wrapper">
-        <Link to={`/offer/${id}`}>
+        <Link to={`/offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>
           <img
             className="place-card__image"
             src={previewImage}
             width={150}
             height={110}
-            alt="Place image"
+            alt="Place offer"
           />
         </Link>
       </div>
@@ -61,7 +63,7 @@ function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`../../offer/${id}`}>{title}</Link>
+          <Link to={`../../offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
