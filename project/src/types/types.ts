@@ -43,7 +43,7 @@ type City = {
 };
 
 type Point = {
-  title: string;
+  id: number;
   latitude: number;
   longitude: number;
 };

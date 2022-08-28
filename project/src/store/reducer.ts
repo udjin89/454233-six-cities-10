@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ArrayOffers, Comments, Offer } from '../types/types';
-import { changeCity, loadFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments } from './action';
-import { filtredOffersByCity } from '../utils/utils';
+import { changeCity, updateNearByOffer, deleteFavorite, loadFavorite, addFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments } from './action';
+import { filtredOffersByCity, deleteFavoriteOffer } from '../utils/utils';
 import { AuthorizationStatus } from '../const';
 
 
@@ -44,7 +44,6 @@ const reducer = createReducer(initialState, (builder) => {
     //Действие для заполнения списка предложений должно поместить в хранилище все предложения по аренде
     .addCase(putListOffers, (state, payload) => {
       const { offers, city } = state;
-
       state.offers = filtredOffersByCity(offers, city);
     })
     //Действие для перерисовки отсортированного списка предложений
@@ -75,6 +74,38 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadFavorite, (state, payload) => {
       state.favorites = payload.payload;
+    })
+    .addCase(addFavorite, (state, payload) => {
+      // state.favorites = [...state.favorites, payload.payload];
+      const offers = [...state.originOffers];
+      offers.forEach((offer) => {
+        if (offer.id === payload.payload.id) {
+          // console.log(offer.isFavorite);
+          offer.isFavorite = payload.payload.isFavorite;
+          // console.log(`payload  = ${payload.payload.isFavorite} and isFavorite = ${offer.isFavorite}`);
+        }
+      });
+      state.originOffers = offers;
+    })
+    .addCase(deleteFavorite, (state, payload) => {
+      const offers = [...state.originOffers];
+      offers.forEach((offer) => {
+        if (offer.id === payload.payload.id) {
+          // console.log(offer.isFavorite);
+          offer.isFavorite = payload.payload.isFavorite;
+          // console.log(`payload  = ${payload.payload.isFavorite} and isFavorite = ${offer.isFavorite}`);
+        }
+      });
+      state.originOffers = offers;
+    })
+    .addCase(updateNearByOffer, (state, payload) => {
+      const offers = [...state.nearby];
+      offers.forEach((offer) => {
+        if (offer.id === payload.payload.id) {
+          offer.isFavorite = !payload.payload.isFavorite;
+        }
+      });
+      state.nearby = offers;
     });
 });
 

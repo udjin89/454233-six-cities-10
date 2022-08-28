@@ -1,54 +1,60 @@
 import { Offer } from '../../types/types';
 // import { MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { store } from '../../store';
-import { addFavorites, fetchPropertyAction } from '../../store/api-action';
+import { addFavorites, fetchPropertyAction, } from '../../store/api-action';
+import { updateNearByOffer } from '../../store/action';
 import { useAppSelector } from '../../hooks';
 import { Navigate } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
 
 type PropsForCard = {
   offer: Offer;
-  onListItemHover: (listItemName: any) => void;
+  onListItemHover?: (listItemName: Offer | undefined) => void;
+  updateNearBy?: boolean,
 };
 
 function Card(props: PropsForCard): JSX.Element {
 
-  const { onListItemHover, offer } = props;
+  const { onListItemHover, offer, updateNearBy } = props;
   const { id, isPremium, previewImage, price, title, type, rating, isFavorite } = offer;
 
   const isAuth = useAppSelector((state) => state.authorizationStatus);
 
+  const navigate = useNavigate();
 
   function changeHover(state: boolean) {
-
-    if (state) {
-
-      onListItemHover(offer);
-    }
-    else {
-      props.onListItemHover(undefined);
+    if (onListItemHover) {
+      if (state) {
+        onListItemHover(offer);
+      }
+      else {
+        onListItemHover(undefined);
+      }
     }
   }
 
   function clickHandle() {
     if (isAuth === AuthorizationStatus.Auth) {
-      store.dispatch(addFavorites(id));
+      //если isFavorite = true, то нам нужно удалить из избранного, а значит послать статус "0" и наоборот
+      const status = isFavorite ? 0 : 1;
+      store.dispatch(addFavorites({ id, status }));
+      if (updateNearBy) {
+        store.dispatch(updateNearByOffer(offer));
+      }
     }
     else {
-      console.log('go to login');
-      // <Redirect to='/login' />
-      return <Navigate to={'/login'} />;
+      navigate('/login');
     }
   }
 
   return (
 
-    <article className="cities__card place-card" onMouseEnter={(evt) => { changeHover(true); }} onMouseLeave={() => changeHover(false)}>
+    <article className={`${updateNearBy ? 'near-places__card place-card' : 'cities__card place-card'}`} onMouseEnter={(evt) => { changeHover(true); }} onMouseLeave={() => changeHover(false)}>
 
       {isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>
+        <Link to={`/offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -78,7 +84,7 @@ function Card(props: PropsForCard): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>{title}</Link>
+          <Link to={`/offer/${id}`} onClick={(evt) => { store.dispatch(fetchPropertyAction(id)); }}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>

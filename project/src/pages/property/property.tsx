@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Form from '../../components/form/form';
 import NotFound from '../notfound/notfound';
 import ReviewsList from '../../components/reviews-list/reviews-list';
@@ -6,6 +6,9 @@ import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import { useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { Offer, Points } from '../../types/types';
+import { store } from '../../store';
+import { addFavorites, fetchPropertyAction } from '../../store/api-action';
+import CardList from '../../components/card-list/card-list';
 
 function Property(): JSX.Element {
 
@@ -18,17 +21,32 @@ function Property(): JSX.Element {
   const currentComments = useAppSelector((state) => state.comments);
   const currentPoints = useAppSelector((state) => state.nearby);
   const isAuth = useAppSelector((state) => state.authorizationStatus);
+  const navigate = useNavigate();
 
   const centerCity = currentProperty ? currentProperty.location : { latitude: 52.370216, longitude: 4.895168, zoom: 11 };
 
-  const points: Points = currentPoints.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
+  const points: Points = currentPoints.map((offer: Offer) => ({ id: offer.id, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
   if (currentProperty === null) {
     return (<NotFound />);
   }
 
-  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods, host, description } = currentProperty;
+  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods, host, description, isFavorite, id } = currentProperty;
   const { name, avatarUrl, isPro } = host;
+
+  function clickHandle() {
+    if (isAuth === AuthorizationStatus.Auth) {
+      //если isFavorite = true, то нам нужно удалить из избранного, а значит послать статус "0" и наоборот
+      const status = isFavorite ? 0 : 1;
+      store.dispatch(addFavorites({ id, status }));
+      store.dispatch(fetchPropertyAction(id));
+    }
+    else {
+      navigate('/login');
+    }
+  }
+
+  // const myStyle = isFavorite ? 'fill: "#4481c3"' : '';
 
   return (
 
@@ -87,7 +105,7 @@ function Property(): JSX.Element {
               <h1 className="property__name">
                 {title}
               </h1>
-              <button className="property__bookmark-button button" type="button">
+              <button className={`property__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''} `} type="button" onClick={() => { clickHandle(); }}>
                 <svg className="property__bookmark-icon" width={31} height={33}>
                   <use xlinkHref="#icon-bookmark" />
                 </svg>
@@ -163,146 +181,10 @@ function Property(): JSX.Element {
           <h2 className="near-places__title">
             Other places in the neighbourhood
           </h2>
-          <div className="near-places__list places__list">
-            <article className="near-places__card place-card">
-              <div className="near-places__image-wrapper place-card__image-wrapper">
-                <a href="#">
-                  <img
-                    className="place-card__image"
-                    src="img/room.jpg"
-                    width={260}
-                    height={200}
-                    alt="Place image"
-                  />
-                </a>
-              </div>
-              <div className="place-card__info">
-                <div className="place-card__price-wrapper">
-                  <div className="place-card__price">
-                    <b className="place-card__price-value">€80</b>
-                    <span className="place-card__price-text">/&nbsp;night</span>
-                  </div>
-                  <button
-                    className="place-card__bookmark-button place-card__bookmark-button--active button"
-                    type="button"
-                  >
-                    <svg
-                      className="place-card__bookmark-icon"
-                      width={18}
-                      height={19}
-                    >
-                      <use xlinkHref="#icon-bookmark" />
-                    </svg>
-                    <span className="visually-hidden">In bookmarks</span>
-                  </button>
-                </div>
-                <div className="place-card__rating rating">
-                  <div className="place-card__stars rating__stars">
-                    <span style={{ width: '80%' }} />
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                </div>
-                <h2 className="place-card__name">
-                  <a href="#">Wood and stone place</a>
-                </h2>
-                <p className="place-card__type">Private room</p>
-              </div>
-            </article>
-            <article className="near-places__card place-card">
-              <div className="near-places__image-wrapper place-card__image-wrapper">
-                <a href="#">
-                  <img
-                    className="place-card__image"
-                    src="img/apartment-02.jpg"
-                    width={260}
-                    height={200}
-                    alt="Place image"
-                  />
-                </a>
-              </div>
-              <div className="place-card__info">
-                <div className="place-card__price-wrapper">
-                  <div className="place-card__price">
-                    <b className="place-card__price-value">€132</b>
-                    <span className="place-card__price-text">/&nbsp;night</span>
-                  </div>
-                  <button
-                    className="place-card__bookmark-button button"
-                    type="button"
-                  >
-                    <svg
-                      className="place-card__bookmark-icon"
-                      width={18}
-                      height={19}
-                    >
-                      <use xlinkHref="#icon-bookmark" />
-                    </svg>
-                    <span className="visually-hidden">To bookmarks</span>
-                  </button>
-                </div>
-                <div className="place-card__rating rating">
-                  <div className="place-card__stars rating__stars">
-                    <span style={{ width: '80%' }} />
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                </div>
-                <h2 className="place-card__name">
-                  <a href="#">Canal View Prinsengracht</a>
-                </h2>
-                <p className="place-card__type">Apartment</p>
-              </div>
-            </article>
-            <article className="near-places__card place-card">
-              <div className="place-card__mark">
-                <span>Premium</span>
-              </div>
-              <div className="near-places__image-wrapper place-card__image-wrapper">
-                <a href="#">
-                  <img
-                    className="place-card__image"
-                    src="img/apartment-03.jpg"
-                    width={260}
-                    height={200}
-                    alt="Place image"
-                  />
-                </a>
-              </div>
-              <div className="place-card__info">
-                <div className="place-card__price-wrapper">
-                  <div className="place-card__price">
-                    <b className="place-card__price-value">€180</b>
-                    <span className="place-card__price-text">/&nbsp;night</span>
-                  </div>
-                  <button
-                    className="place-card__bookmark-button button"
-                    type="button"
-                  >
-                    <svg
-                      className="place-card__bookmark-icon"
-                      width={18}
-                      height={19}
-                    >
-                      <use xlinkHref="#icon-bookmark" />
-                    </svg>
-                    <span className="visually-hidden">To bookmarks</span>
-                  </button>
-                </div>
-                <div className="place-card__rating rating">
-                  <div className="place-card__stars rating__stars">
-                    <span style={{ width: '100%' }} />
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                </div>
-                <h2 className="place-card__name">
-                  <a href="#">Nice, cozy, warm big bed apartment</a>
-                </h2>
-                <p className="place-card__type">Apartment</p>
-              </div>
-            </article>
-          </div>
+          <CardList offers={currentPoints} updateNearBy></CardList>
         </section>
       </div>
-    </main>
+    </main >
 
   );
 }

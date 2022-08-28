@@ -4,7 +4,6 @@ import App from './components/app/app';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { fetchOffersAction } from './store/api-action';
-// import { ErrorMessage } from './components/error/error';
 import { checkAuthAction } from './store/api-action';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

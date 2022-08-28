@@ -12,10 +12,12 @@ import LayoutFooter from '../layout/layout-footer';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
+import { useAppDispatch } from '../../hooks';
+import { fetchFavorites } from '../../store/api-action';
 
 //функция возвращает jsx элемент
 function App(): JSX.Element {
-
+  const dispatch = useAppDispatch();
 
   const { authorizationStatus, isDataLoaded } = useAppSelector((state) => state);
 
@@ -52,9 +54,8 @@ function App(): JSX.Element {
 
           </Route>
 
-          <Route path='offer'>
-            <Route index element={<Property />} />
-            <Route path=':id' element={<Property />} />
+          <Route path='offer/:id' element={<Property />}>
+            {/* <Route path=':id' element={<Property />} /> */}
           </Route>
 
         </Route>

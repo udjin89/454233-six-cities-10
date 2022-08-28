@@ -1,4 +1,4 @@
-import { ArrayOffers } from '../types/types';
+import { ArrayOffers, Offer } from '../types/types';
 
 function filtredOffersByCity(offers: ArrayOffers, filter: string) {
   const filtredData = offers.filter((elem) => elem.city.name === filter);
@@ -22,4 +22,10 @@ function sortByRate(offers: ArrayOffers) {
 
   return sortedData;
 }
-export { filtredOffersByCity, sortByLowToHigh, sortByHighToLow, sortByRate };
+
+function deleteFavoriteOffer(favoritesOffers: ArrayOffers, favoriteItem: Offer) {
+  console.log(favoriteItem);
+  return favoritesOffers.filter((offer) => offer.id !== favoriteItem.id);
+}
+
+export { filtredOffersByCity, sortByLowToHigh, sortByHighToLow, sortByRate, deleteFavoriteOffer };

@@ -28,3 +28,9 @@ export const loadComments = createAction<Comments>('data/loadComments');
 export const loadPropertyNearby = createAction<ArrayOffers>('data/loadPropertyNearby');
 
 export const loadFavorite = createAction<ArrayOffers>('data/loadFavorite');
+
+export const addFavorite = createAction<Offer>('data/addFavorite');
+
+export const deleteFavorite = createAction<Offer>('data/deleteFavorite');
+
+export const updateNearByOffer = createAction<Offer>('data/updateNearByOffer');

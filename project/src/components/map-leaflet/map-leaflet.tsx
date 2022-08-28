@@ -30,7 +30,7 @@ function MapLeaflet(props: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, centerCity);
-  // console.log(centerCity);
+  console.log(selectedPoint);
   useEffect(() => {
 
     const layerGroup = leaflet.layerGroup();
@@ -47,7 +47,7 @@ function MapLeaflet(props: MapProps): JSX.Element {
 
         marker
           .setIcon(
-            selectedPoint !== undefined && point.title === selectedPoint.title
+            selectedPoint !== undefined && point.id === selectedPoint.id
               ? currentCustomIcon
               : defaultCustomIcon
           );
