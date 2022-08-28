@@ -1,6 +1,8 @@
 
 import { Offer } from '../../types/types';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { addFavorites } from '../../store/api-action';
 
 type PropsForFavoritesListItem = { offer: Offer };
 
@@ -10,12 +12,17 @@ function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
   // console.log('----');
   // console.log(props.offer);
   // console.log('***');
+  const dispatch = useAppDispatch();
+  const status = 0;
+  function clickHandle() {
+    dispatch(addFavorites({ id, status }));
+  }
 
   return (
     <article className="favorites__card place-card">
       {isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
       <div className="favorites__image-wrapper place-card__image-wrapper">
-        <Link to={`../../offer/${id}`}>
+        <Link to={`/offer/${id}`}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -35,7 +42,7 @@ function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
           </div>
           <button
             className="place-card__bookmark-button place-card__bookmark-button--active button"
-            type="button"
+            type="button" onClick={() => { clickHandle(); }}
           >
             <svg
               className="place-card__bookmark-icon"

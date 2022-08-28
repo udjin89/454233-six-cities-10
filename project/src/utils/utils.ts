@@ -24,7 +24,6 @@ function sortByRate(offers: ArrayOffers) {
 }
 
 function deleteFavoriteOffer(favoritesOffers: ArrayOffers, favoriteItem: Offer) {
-  console.log(favoriteItem);
   return favoritesOffers.filter((offer) => offer.id !== favoriteItem.id);
 }
 
