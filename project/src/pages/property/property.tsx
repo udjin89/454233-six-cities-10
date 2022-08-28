@@ -17,7 +17,7 @@ function Property(): JSX.Element {
   // можно найти его в массиве
   const params = useParams();
   const hotelId = params.id;
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const currentProperty = useAppSelector((state) => state.property);
   const currentComments = useAppSelector((state) => state.comments);
