@@ -2,11 +2,14 @@ import CardList from '../../components/card-list/card-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import CityList from '../../components/city-list/city-list';
 import Sort from '../../components/sort/sort';
-import { useState } from 'react';
-import { Point, Offer, Points } from '../../types/types';
+import { Fragment, useEffect, useState } from 'react';
+import { Point, Offer, Points, ArrayOffers } from '../../types/types';
 import { CITY_LIST } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { filtredOffersByCity } from '../../utils/utils';
+import { useAppDispatch } from '../../hooks';
+import { putSortOffers } from '../../store/action';
+import { sortByLowToHigh, sortByHighToLow, sortByRate } from '../../utils/utils';
 
 function Main(): JSX.Element {
 
@@ -14,29 +17,58 @@ function Main(): JSX.Element {
 
   const currentCity = useAppSelector((state) => state.city);
   const originListOffers = useAppSelector((state) => state.originOffers);
-
+  const offers = useAppSelector((state) => state.offers);
   const currentListCity = filtredOffersByCity(originListOffers, currentCity);
+
+  const [sortedOffers, setSortedOffers] = useState<ArrayOffers>(currentListCity); // отсортированные предложения (популярность, стоимость, рейтинг)
 
   const countOffersCity = currentListCity.length;
 
-  const onListItemHover = (listItemName: any) => {
-    const currentPoint1 = currentListCity.find((point) => point === listItemName);
+  const onListItemHover = (listItemName: Offer | undefined) => {
 
-    if (currentPoint1) {
-      const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
-      setSelectedPoint(currentPoint);
+    if (listItemName) {
+      setSelectedPoint({ id: listItemName.id, latitude: listItemName.location.latitude, longitude: listItemName.location.longitude });
+      // const currentPoint1 = currentListCity.find((point) => point.id === listItemName.id);
+      // if (currentPoint1) {
+      //   const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
+      //   setSelectedPoint(currentPoint);
+      // }
+      // else { setSelectedPoint(currentPoint1); }
     }
-    else { setSelectedPoint(currentPoint1); }
+    else {
+      setSelectedPoint(undefined);
+    }
+
   };
+
+  function changeSortTypeHandler(sortType: string) {
+    let currentList = currentListCity.slice();
+
+    switch (sortType) {
+      case 'Popular': currentList = currentListCity; break;
+      case 'PriceLowToHigh': currentList = sortByLowToHigh(currentList); break;
+      case 'PriceHighToLow': currentList = sortByHighToLow(currentList); break;
+      case 'TopRateFirst': currentList = sortByRate(currentList); break;
+      default: break;
+    }
+    setSortedOffers(currentList);
+  }
+
+  useEffect(() => {
+    console.log('use effect Sort');
+    setSortedOffers(currentListCity);
+  }, [originListOffers, currentCity,/* sortType*/]);
+
+  if (currentListCity.length === 0) { return <div></div>; }
 
   const centerCity = {
-    title: currentListCity[0].city.name,
-    latitude: currentListCity[0].city.location.latitude,
-    longitude: currentListCity[0].city.location.longitude,
-    zoom: currentListCity[0].city.location.zoom,
+    title: currentListCity[0]?.city.name || 'Paris',
+    latitude: currentListCity[0]?.city.location.latitude || 52.370316,
+    longitude: currentListCity[0]?.city.location.longitude || 4.885168,
+    zoom: currentListCity[0]?.city.location.zoom || 10,
   };
 
-  const points: Points = currentListCity.map((offer: Offer) => ({ title: offer.title, latitude: offer.location.latitude, longitude: offer.location.longitude }));
+  const points: Points = currentListCity.map((offer: Offer) => ({ id: offer.id, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
   return (
 
@@ -45,7 +77,6 @@ function Main(): JSX.Element {
       <div className="tabs">
         <section className="locations container">
           <CityList cityList={CITY_LIST}></CityList>
-
         </section>
       </div>
       {
@@ -71,14 +102,14 @@ function Main(): JSX.Element {
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{countOffersCity} places to stay in {currentCity}</b>
 
-                <Sort offers={currentListCity} originListOffers={originListOffers}></Sort>
-                <CardList offers={currentListCity} onListItemHover={onListItemHover} />
+                <Sort changeSortTypeHandler={changeSortTypeHandler}></Sort>
+                <CardList offers={sortedOffers} onListItemHover={onListItemHover} updateNearBy={false} />
 
               </section>
               <div className="cities__right-section">
-
-                <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
-
+                <section className="cities__map">
+                  <MapLeaflet centerCity={centerCity} points={points} selectedPoint={selectedPoint} />
+                </section>
               </div>
             </div>
           </div>

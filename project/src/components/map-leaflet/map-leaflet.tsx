@@ -30,14 +30,14 @@ function MapLeaflet(props: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, centerCity);
-
+  console.log(selectedPoint);
   useEffect(() => {
 
     const layerGroup = leaflet.layerGroup();
 
     if (map) {
 
-      map.setView({ lat: centerCity.latitude, lng: centerCity.longitude }, 10);
+      map.setView({ lat: centerCity.latitude, lng: centerCity.longitude }, centerCity.zoom);
 
       points.forEach((point) => {
         const marker = new Marker({
@@ -47,7 +47,7 @@ function MapLeaflet(props: MapProps): JSX.Element {
 
         marker
           .setIcon(
-            selectedPoint !== undefined && point.title === selectedPoint.title
+            selectedPoint !== undefined && point.id === selectedPoint.id
               ? currentCustomIcon
               : defaultCustomIcon
           );
@@ -63,9 +63,9 @@ function MapLeaflet(props: MapProps): JSX.Element {
   }, [map, points, selectedPoint, centerCity]);
 
   return (
-    <section className="cities__map">
-      <div className="map" style={{ height: '100%' }} ref={mapRef}></div>
-    </section>
+    // <section className="cities__map">
+    <div className="map" style={{ height: '100%' }} ref={mapRef}></div>
+    // </section>
   );
 }
 

@@ -1,30 +1,20 @@
 import { useState } from 'react';
-import { ArrayOffers } from '../../types/types';
-import { sortByLowToHigh, sortByHighToLow, sortByRate } from '../../utils/utils';
-import { putSortOffers } from '../../store/action';
-import { useAppDispatch } from '../../hooks';
 
-function Sort(props: { offers: ArrayOffers, originListOffers: ArrayOffers }): JSX.Element {
-  const originOffers = props.offers.slice(); // копируем все предложения, для сброса
+type PropsForSort = {
+  changeSortTypeHandler: (sortType: string) => void;
+};
+
+function Sort(props: PropsForSort): JSX.Element {
   const [openSortMenu, setOpenSortMenu] = useState(false); //состояние меню (открыто/закрыто)
-  const [currentSortType, setSortType] = useState('Popular');//текущию тип сортировки
-  const dispatch = useAppDispatch(); //просто обертка для удобного использования dispatch
+  const [currentSortType, setCurrentSortType] = useState('Popular');
+
+  const { changeSortTypeHandler } = props;
 
   function changeSortType(sortType: string) {
-
-    let currentList = originOffers.slice();
-
-    switch (sortType) {
-      case 'Popular': currentList = props.originListOffers; break;
-      case 'PriceLowToHigh': currentList = sortByLowToHigh(currentList); break;
-      case 'PriceHighToLow': currentList = sortByHighToLow(currentList); break;
-      case 'TopRateFirst': currentList = sortByRate(currentList); break;
-      default: break;
-    }
-    setSortType(sortType);
-    dispatch(putSortOffers(currentList));
-
+    changeSortTypeHandler(sortType);
+    setCurrentSortType(sortType);
   }
+
   function changeOpenSortMenu(state: boolean) {
     setOpenSortMenu(state);
   }

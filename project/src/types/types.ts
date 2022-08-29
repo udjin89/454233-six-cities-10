@@ -36,21 +36,21 @@ type Offer = {
 type ArrayOffers = Offer[];
 
 type City = {
-  title: string;
+  // title: string;
   latitude: number;
   longitude: number;
   zoom: number;
 };
 
 type Point = {
-  title: string;
+  id: number;
   latitude: number;
   longitude: number;
 };
 
 type Points = Point[];
 
-type Review = {
+type Comment = {
   comment: string
   date: string
   id: number
@@ -63,7 +63,7 @@ type Review = {
   }
 }
 
-type Reviews = Review[];
+type Comments = Comment[];
 
 type AuthData = {
   login: string;
@@ -78,6 +78,11 @@ type UserData = {
   token: string
 }
 
+type CommentData = {
+  hotelId: number,
+  comment: string,
+  rating: number,
+}
 type ErrorType = unknown;
 
-export type { Offer, ArrayOffers, City, Point, Points, Review, Reviews, AuthData, UserData, ErrorType };
+export type { Offer, ArrayOffers, City, Point, Points, Comment, Comments, AuthData, UserData, ErrorType, CommentData };

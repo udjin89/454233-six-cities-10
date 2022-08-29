@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks';
 import Main from '../../pages/main/main';
@@ -10,10 +10,14 @@ import NotFound from '../../pages/notfound/notfound';
 import PrivateRoute from '../private-route/private-route';
 import LayoutFooter from '../layout/layout-footer';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import HistoryRouter from '../history-route/history-route';
+import browserHistory from '../../browser-history';
+import { useAppDispatch } from '../../hooks';
+import { fetchFavorites } from '../../store/api-action';
 
 //функция возвращает jsx элемент
 function App(): JSX.Element {
-
+  const dispatch = useAppDispatch();
 
   const { authorizationStatus, isDataLoaded } = useAppSelector((state) => state);
 
@@ -32,7 +36,7 @@ function App(): JSX.Element {
     //
     // index - значит корневой элемент по умолчанию
     // path='*' - значит все пути, которые не заданы
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
 
         <Route path='/' element={<Layout />}>
@@ -42,7 +46,7 @@ function App(): JSX.Element {
           <Route path='favorites' element={<LayoutFooter />}>
 
             <Route index element={
-              <PrivateRoute hasAccess={AuthorizationStatus.Auth}>
+              <PrivateRoute hasAccess={authorizationStatus}>
                 <Favorites />
               </PrivateRoute>
             }
@@ -50,9 +54,8 @@ function App(): JSX.Element {
 
           </Route>
 
-          <Route path='offer'>
-            <Route index element={<Property />} />
-            <Route path=':id' element={<Property />} />
+          <Route path='offer/:id' element={<Property />}>
+            {/* <Route path=':id' element={<Property />} /> */}
           </Route>
 
         </Route>
@@ -62,7 +65,7 @@ function App(): JSX.Element {
         <Route path='*' element={<NotFound />} />
 
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
 
   );
 }

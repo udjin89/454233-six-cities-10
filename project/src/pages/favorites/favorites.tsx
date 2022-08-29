@@ -3,12 +3,14 @@ import { useAppSelector } from '../../hooks';
 
 
 function Favorites(): JSX.Element {
-  // console.log(props.offers.length);
 
+  const currentFavorites = useAppSelector((state) => state.favorites);
   //заглушка ниже
-  const offers = useAppSelector((state) => state.offers);
+  // const offers = useAppSelector((state) => state.offers);
 
-  if (!offers.length) {
+  // const offers =
+
+  if (currentFavorites.length === 0) {
     return (
       <main className="page__main page__main--favorites page__main--favorites-empty">
         <div className="page__favorites-container container">
@@ -32,7 +34,7 @@ function Favorites(): JSX.Element {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <FavoritesList offers={offers} />
+            <FavoritesList offers={currentFavorites} />
           </section>
         </div>
       </main>

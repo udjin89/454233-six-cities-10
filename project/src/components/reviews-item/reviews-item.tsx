@@ -1,17 +1,15 @@
-// import FormSendMessage from '../form-send-message/form-send-message';
+import { Comment } from '../../types/types';
+import { MONTH } from '../../const';
 
-import { Review } from '../../types/types';
-
-type PropsReviewsItem = { review: Review };
+type PropsReviewsItem = { review: Comment };
 
 function ReviewsItem(props: PropsReviewsItem): JSX.Element {
 
   const { comment, date, rating, user, } = props.review;
-  const { avatarUrl, name } = user; //id, isPro,
+  const { avatarUrl, name } = user;
 
+  const formatDate = new Date(date);
 
-  // const month = Date.parse(date);
-  // console.log(month);
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
@@ -32,7 +30,7 @@ function ReviewsItem(props: PropsReviewsItem): JSX.Element {
         <p className="reviews__text">
           {comment}
         </p>
-        <time className="reviews__time" dateTime="2019-04-24">{date}</time>
+        <time className="reviews__time" dateTime="2019-04-24">{MONTH[formatDate.getMonth()]} {formatDate.getFullYear()} </time>
       </div>
     </li>
   );
