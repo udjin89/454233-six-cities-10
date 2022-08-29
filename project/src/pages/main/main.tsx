@@ -2,13 +2,12 @@ import CardList from '../../components/card-list/card-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import CityList from '../../components/city-list/city-list';
 import Sort from '../../components/sort/sort';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Point, Offer, Points, ArrayOffers } from '../../types/types';
 import { CITY_LIST } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { filtredOffersByCity } from '../../utils/utils';
-import { useAppDispatch } from '../../hooks';
-import { putSortOffers } from '../../store/action';
+
 import { sortByLowToHigh, sortByHighToLow, sortByRate } from '../../utils/utils';
 
 function Main(): JSX.Element {
@@ -28,12 +27,6 @@ function Main(): JSX.Element {
 
     if (listItemName) {
       setSelectedPoint({ id: listItemName.id, latitude: listItemName.location.latitude, longitude: listItemName.location.longitude });
-      // const currentPoint1 = currentListCity.find((point) => point.id === listItemName.id);
-      // if (currentPoint1) {
-      //   const currentPoint = { title: currentPoint1.title, latitude: currentPoint1.location.latitude, longitude: currentPoint1.location.longitude };
-      //   setSelectedPoint(currentPoint);
-      // }
-      // else { setSelectedPoint(currentPoint1); }
     }
     else {
       setSelectedPoint(undefined);
@@ -55,7 +48,7 @@ function Main(): JSX.Element {
   }
 
   useEffect(() => {
-    console.log('use effect Sort');
+    // console.log('use effect Sort');
     setSortedOffers(currentListCity);
   }, [originListOffers, currentCity,/* sortType*/]);
 

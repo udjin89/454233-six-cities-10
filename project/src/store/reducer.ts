@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ArrayOffers, Comments, Offer } from '../types/types';
 import { changeCity, updateNearByOffer, deleteFavorite, loadFavorite, addFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments } from './action';
-import { filtredOffersByCity, deleteFavoriteOffer } from '../utils/utils';
+import { filtredOffersByCity } from '../utils/utils';
 import { AuthorizationStatus } from '../const';
 
 

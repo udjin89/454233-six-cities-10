@@ -3,7 +3,7 @@ import Form from '../../components/form/form';
 import NotFound from '../notfound/notfound';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { Offer, Points } from '../../types/types';
 import { store } from '../../store';
@@ -17,17 +17,21 @@ function Property(): JSX.Element {
   // можно найти его в массиве
   const params = useParams();
   const hotelId = params.id;
+  // const dispatch = useAppDispatch();
+
   const currentProperty = useAppSelector((state) => state.property);
   const currentComments = useAppSelector((state) => state.comments);
   const currentPoints = useAppSelector((state) => state.nearby);
   const isAuth = useAppSelector((state) => state.authorizationStatus);
   const navigate = useNavigate();
 
+
   const centerCity = currentProperty ? currentProperty.location : { latitude: 52.370216, longitude: 4.895168, zoom: 11 };
 
   const points: Points = currentPoints.map((offer: Offer) => ({ id: offer.id, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
   if (currentProperty === null) {
+    // dispatch(fetchPropertyAction(Number(hotelId)));
     return (<NotFound />);
   }
 

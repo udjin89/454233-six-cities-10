@@ -30,7 +30,7 @@ function MapLeaflet(props: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, centerCity);
-  console.log(selectedPoint);
+  // console.log(selectedPoint);
   useEffect(() => {
 
     const layerGroup = leaflet.layerGroup();
