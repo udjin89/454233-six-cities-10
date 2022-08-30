@@ -21,8 +21,8 @@ type InitialState = {
 const initialState: InitialState = {
   city: 'Paris',
   offers: [],
-  // originOffers: [],
-  // authorizationStatus: AuthorizationStatus.Unknown,
+   originOffers: [],
+   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
   error: null,
   property: null,
