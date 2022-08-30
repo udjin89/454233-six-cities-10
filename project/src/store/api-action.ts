@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 //Создаем асинхронное действие с помощью createAsyncThunk
 // createAsyncThunk<...> - передаем необходимую инфу о типах
-export const fetchOffersAction = createAsyncThunk<void, undefined, {
+export const fetchOffersAction = createAsyncThunk<ArrayOffers, undefined, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -21,13 +21,14 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
   async (_arg, { dispatch, getState, extra: api }) => {
     // api - настроенный экземпляр axios
     const { data } = await api.get<ArrayOffers>(APIRoute.Offers);
-    dispatch(setDataLoadedStatus(true));
-    dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
-    dispatch(setDataLoadedStatus(false));
+    // dispatch(setDataLoadedStatus(true));
+    // dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
+    // dispatch(setDataLoadedStatus(false));
+    return data;
   },
 );
 
-export const fetchPropertyAction = createAsyncThunk<void, number, {
+export const fetchPropertyAction = createAsyncThunk<Offer, number, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -38,11 +39,12 @@ export const fetchPropertyAction = createAsyncThunk<void, number, {
     toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
-    dispatch(setDataLoadedStatus(true));
-    dispatch(loadProperty(data));
-    dispatch(fetchCommentsAction(_arg));
-    dispatch(fetchPropertyNearby(_arg));
-    dispatch(setDataLoadedStatus(false));
+    // dispatch(setDataLoadedStatus(true));
+    // dispatch(loadProperty(data));
+    // dispatch(fetchCommentsAction(_arg));
+    // dispatch(fetchPropertyNearby(_arg));
+    // dispatch(setDataLoadedStatus(false));
+    return data;
   },
 );
 
@@ -68,14 +70,15 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, { dispatch, extra: api }) => {
-    try {
-      const { data } = await api.get(APIRoute.Login);
-      dispatch(requireAuthorization(AuthorizationStatus.Auth));
-      dispatch(fetchFavorites());
-      toast.success(`Hello, ${data.name} `, { position: 'top-center', });
-    } catch {
-      dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-    }
+    await api.get(APIRoute.Login);
+    // try {
+    // const { data } = await api.get(APIRoute.Login);
+    // dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    // dispatch(fetchFavorites());
+    // toast.success(`Hello, ${data.name} `, { position: 'top-center', });
+    // } catch {
+    // dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    // }
   },
 );
 

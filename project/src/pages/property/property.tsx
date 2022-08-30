@@ -16,7 +16,9 @@ function Property(): JSX.Element {
   //в нём и будет содержаться id запрошенного предложения. Зная, id
   // можно найти его в массиве
   const params = useParams();
+
   const hotelId = Number(params.id);
+
 
   const currentProperty = useAppSelector((state) => state.property);
   const currentComments = useAppSelector((state) => state.comments);
