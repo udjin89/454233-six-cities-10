@@ -21,8 +21,8 @@ type InitialState = {
 const initialState: InitialState = {
   city: 'Paris',
   offers: [],
-   originOffers: [],
-   authorizationStatus: AuthorizationStatus.Unknown,
+  originOffers: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
   error: null,
   property: null,
@@ -54,9 +54,9 @@ const reducer = createReducer(initialState, (builder) => {
       state.offers = payload.payload;
       state.originOffers = payload.payload;
     })
-     .addCase(requireAuthorization, (state, payload) => {
-       state.authorizationStatus = payload.payload;
-     })
+    .addCase(requireAuthorization, (state, payload) => {
+      state.authorizationStatus = payload.payload;
+    })
     .addCase(setError, (state, payload) => {
       state.error = payload.payload;
     })
