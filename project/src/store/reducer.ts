@@ -8,8 +8,8 @@ import { AuthorizationStatus } from '../const';
 type InitialState = {
   city: string,
   offers: ArrayOffers,
-  // originOffers: ArrayOffers,
-  // authorizationStatus: AuthorizationStatus,
+  originOffers: ArrayOffers,
+  authorizationStatus: AuthorizationStatus,
   isDataLoaded: boolean,
   error: string | null,
   property: Offer | null,
@@ -21,8 +21,8 @@ type InitialState = {
 const initialState: InitialState = {
   city: 'Paris',
   offers: [],
-  // originOffers: [],
-  // authorizationStatus: AuthorizationStatus.Unknown,
+  originOffers: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
   error: null,
   property: null,
@@ -54,9 +54,9 @@ const reducer = createReducer(initialState, (builder) => {
       state.offers = payload.payload;
       state.originOffers = payload.payload;
     })
-    // .addCase(requireAuthorization, (state, payload) => {
-    //   state.authorizationStatus = payload.payload;
-    // })
+    .addCase(requireAuthorization, (state, payload) => {
+      state.authorizationStatus = payload.payload;
+    })
     .addCase(setError, (state, payload) => {
       state.error = payload.payload;
     })
@@ -76,13 +76,10 @@ const reducer = createReducer(initialState, (builder) => {
       state.favorites = payload.payload;
     })
     .addCase(addFavorite, (state, payload) => {
-      // state.favorites = [...state.favorites, payload.payload];
       const offers = [...state.originOffers];
       offers.forEach((offer) => {
         if (offer.id === payload.payload.id) {
-          // console.log(offer.isFavorite);
           offer.isFavorite = payload.payload.isFavorite;
-          // console.log(`payload  = ${payload.payload.isFavorite} and isFavorite = ${offer.isFavorite}`);
         }
       });
       state.originOffers = offers;
@@ -91,9 +88,7 @@ const reducer = createReducer(initialState, (builder) => {
       const offers = [...state.originOffers];
       offers.forEach((offer) => {
         if (offer.id === payload.payload.id) {
-          // console.log(offer.isFavorite);
           offer.isFavorite = payload.payload.isFavorite;
-          // console.log(`payload  = ${payload.payload.isFavorite} and isFavorite = ${offer.isFavorite}`);
         }
       });
       state.originOffers = offers;
