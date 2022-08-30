@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 //Создаем асинхронное действие с помощью createAsyncThunk
 // createAsyncThunk<...> - передаем необходимую инфу о типах
-export const fetchOffersAction = createAsyncThunk<void, undefined, {
+export const fetchOffersAction = createAsyncThunk<ArrayOffers, undefined, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -24,10 +24,11 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
     dispatch(setDataLoadedStatus(true));
     dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
     dispatch(setDataLoadedStatus(false));
+    return data;
   },
 );
 
-export const fetchPropertyAction = createAsyncThunk<void, number, {
+export const fetchPropertyAction = createAsyncThunk<Offer, number, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -35,7 +36,6 @@ export const fetchPropertyAction = createAsyncThunk<void, number, {
   'data/fetchProperty', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    // console.log(`fetchPropertyAction argument = ${_arg}`);
     toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
@@ -44,6 +44,7 @@ export const fetchPropertyAction = createAsyncThunk<void, number, {
     dispatch(fetchCommentsAction(_arg));
     dispatch(fetchPropertyNearby(_arg));
     dispatch(setDataLoadedStatus(false));
+    return data;
   },
 );
 
@@ -130,7 +131,7 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
   'user/sendComment',
   async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
     try {
-      const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
+      await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
       dispatch(fetchCommentsAction(hotelId));
       toast.success(`Load coments SUCCESS, id=${hotelId}`, { position: 'top-right', });
     }
@@ -149,7 +150,6 @@ export const fetchPropertyNearby = createAsyncThunk<void, number, {
   'data/fetchPropertyNearby', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    // console.log(`fetchPropertyAction argument = ${_arg}`);
     const routePropertyNearby = APIRoute.Offers.concat(`/${_arg}/`).concat('nearby');
     try {
       const { data } = await api.get<ArrayOffers>(routePropertyNearby);
@@ -157,7 +157,6 @@ export const fetchPropertyNearby = createAsyncThunk<void, number, {
       toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
     }
     catch {
-      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
     }
   },
@@ -175,7 +174,6 @@ export const fetchFavorites = createAsyncThunk<void, undefined, {
       dispatch(loadFavorite(data));
     }
     catch {
-      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
     }
   },
@@ -190,7 +188,6 @@ export const addFavorites = createAsyncThunk<boolean, { id: number, status: numb
   async ({ id, status }, { dispatch, extra: api }) => {
     try {
       const { data } = await api.post<Offer>(APIRoute.Favorite.concat(`/${id}/${status}`), {});
-      // console.log(data, status);
       if (status) {
         dispatch(addFavorite(data));
       } else {

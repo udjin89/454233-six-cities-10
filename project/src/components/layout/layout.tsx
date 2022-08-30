@@ -2,7 +2,6 @@ import { Link, Outlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { logoutAction } from '../../store/api-action';
-import { MouseEventHandler } from 'react';
 
 function Layout(): JSX.Element {
 
@@ -14,7 +13,7 @@ function Layout(): JSX.Element {
 
   const isLogin = (authorizationStatus === AuthorizationStatus.Auth);
 
-  function singOut(evt: any) {
+  function singOut(evt: React.MouseEvent) {
     evt.preventDefault();
     dispatch(logoutAction());
   }

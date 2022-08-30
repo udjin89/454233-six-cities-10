@@ -76,13 +76,10 @@ const reducer = createReducer(initialState, (builder) => {
       state.favorites = payload.payload;
     })
     .addCase(addFavorite, (state, payload) => {
-      // state.favorites = [...state.favorites, payload.payload];
       const offers = [...state.originOffers];
       offers.forEach((offer) => {
         if (offer.id === payload.payload.id) {
-          // console.log(offer.isFavorite);
           offer.isFavorite = payload.payload.isFavorite;
-          // console.log(`payload  = ${payload.payload.isFavorite} and isFavorite = ${offer.isFavorite}`);
         }
       });
       state.originOffers = offers;
@@ -91,9 +88,7 @@ const reducer = createReducer(initialState, (builder) => {
       const offers = [...state.originOffers];
       offers.forEach((offer) => {
         if (offer.id === payload.payload.id) {
-          // console.log(offer.isFavorite);
           offer.isFavorite = payload.payload.isFavorite;
-          // console.log(`payload  = ${payload.payload.isFavorite} and isFavorite = ${offer.isFavorite}`);
         }
       });
       state.originOffers = offers;
