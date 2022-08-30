@@ -39,6 +39,7 @@ export const fetchPropertyAction = createAsyncThunk<Offer, number, {
     toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
+
     dispatch(setDataLoadedStatus(true));
     dispatch(loadProperty(data));
     dispatch(fetchCommentsAction(_arg));
@@ -70,14 +71,15 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, { dispatch, extra: api }) => {
-    try {
-      const { data } = await api.get(APIRoute.Login);
-      dispatch(requireAuthorization(AuthorizationStatus.Auth));
-      dispatch(fetchFavorites());
-      toast.success(`Hello, ${data.name} `, { position: 'top-center', });
-    } catch {
-      dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-    }
+    await api.get(APIRoute.Login);
+    // try {
+    // const { data } = await api.get(APIRoute.Login);
+    // dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    // dispatch(fetchFavorites());
+    // toast.success(`Hello, ${data.name} `, { position: 'top-center', });
+    // } catch {
+    // dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    // }
   },
 );
 

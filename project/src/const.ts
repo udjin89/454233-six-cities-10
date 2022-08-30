@@ -43,3 +43,8 @@ export enum APIRoute {
   Logout = '/logout', //Завершает сеанс работы — выход из закрытой части приложения.
   Comments = '/comments', //Возвращает список комментариев для предложения с идентификатором hotelId
 }
+
+export enum NameSpace {
+  Data = 'DATA',
+  User = 'USER',
+}
