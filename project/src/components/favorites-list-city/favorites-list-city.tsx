@@ -9,9 +9,6 @@ function FavoritesListByCity(props: PropsForFavoritesList): JSX.Element {
 
   const favoritesOffersByCity: ArrayOffers = props.offers;
   const currentCity = props.offers[0].city.name;
-  // console.log(props.offers[0].city);
-  // console.log(props.offer);
-  // console.log('***');
 
   return (
 

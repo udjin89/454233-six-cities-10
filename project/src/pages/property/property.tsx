@@ -3,7 +3,7 @@ import Form from '../../components/form/form';
 import NotFound from '../notfound/notfound';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { Offer, Points } from '../../types/types';
 import { store } from '../../store';
@@ -16,8 +16,7 @@ function Property(): JSX.Element {
   //в нём и будет содержаться id запрошенного предложения. Зная, id
   // можно найти его в массиве
   const params = useParams();
-  const hotelId = params.id;
-  const dispatch = useAppDispatch();
+  const hotelId = Number(params.id);
 
   const currentProperty = useAppSelector((state) => state.property);
   const currentComments = useAppSelector((state) => state.comments);
@@ -31,7 +30,6 @@ function Property(): JSX.Element {
   const points: Points = currentPoints.map((offer: Offer) => ({ id: offer.id, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
   if (currentProperty === null) {
-    // dispatch(fetchPropertyAction(Number(hotelId)));
     return (<NotFound />);
   }
 
@@ -50,8 +48,6 @@ function Property(): JSX.Element {
     }
   }
 
-  // const myStyle = isFavorite ? 'fill: "#4481c3"' : '';
-
   return (
 
     <main className="page__main page__main--property">
@@ -62,42 +58,42 @@ function Property(): JSX.Element {
               <img
                 className="property__image"
                 src="img/room.jpg"
-                alt="Photo studio"
+                alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
                 src="img/apartment-01.jpg"
-                alt="Photo studio"
+                alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
                 src="img/apartment-02.jpg"
-                alt="Photo studio"
+                alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
                 src="img/apartment-03.jpg"
-                alt="Photo studio"
+                alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
                 src="img/studio-01.jpg"
-                alt="Photo studio"
+                alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
                 src="img/apartment-01.jpg"
-                alt="Photo studio"
+                alt=" studio"
               />
             </div>
           </div>

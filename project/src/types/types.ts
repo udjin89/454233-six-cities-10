@@ -36,7 +36,6 @@ type Offer = {
 type ArrayOffers = Offer[];
 
 type City = {
-  // title: string;
   latitude: number;
   longitude: number;
   zoom: number;

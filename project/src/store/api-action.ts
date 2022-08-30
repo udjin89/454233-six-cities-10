@@ -35,7 +35,6 @@ export const fetchPropertyAction = createAsyncThunk<void, number, {
   'data/fetchProperty', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    // console.log(`fetchPropertyAction argument = ${_arg}`);
     toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
@@ -130,7 +129,7 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
   'user/sendComment',
   async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
     try {
-      const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
+      await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
       dispatch(fetchCommentsAction(hotelId));
       toast.success(`Load coments SUCCESS, id=${hotelId}`, { position: 'top-right', });
     }
@@ -157,7 +156,6 @@ export const fetchPropertyNearby = createAsyncThunk<void, number, {
       toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
     }
     catch {
-      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
     }
   },
@@ -175,7 +173,6 @@ export const fetchFavorites = createAsyncThunk<void, undefined, {
       dispatch(loadFavorite(data));
     }
     catch {
-      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
     }
   },

@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { sendCommentAction } from '../../store/api-action';
 import { useAppDispatch } from '../../hooks';
-type PropsForm = any;
+
+type PropsForm = {
+  hotelId: number
+};
 
 function Form(props: PropsForm): JSX.Element {
   const dispatch = useAppDispatch();
@@ -21,7 +24,7 @@ function Form(props: PropsForm): JSX.Element {
     });
   }
 
-  function changeText(evt: any) {
+  function changeText(evt: React.ChangeEvent<HTMLTextAreaElement>) {
     evt.preventDefault();
 
     if (evt.target.textLength >= 50) {
@@ -49,13 +52,12 @@ function Form(props: PropsForm): JSX.Element {
     dispatch(sendCommentAction({ hotelId, comment, rating }));
   };
 
-  const handleSubmit = (evt: any) => {
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     onSubmit(formState.review, formState.rating);
 
   };
-
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
@@ -155,7 +157,7 @@ function Form(props: PropsForm): JSX.Element {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formState.review}
-        onChange={changeText}
+        onChange={(evt) => { changeText(evt); }}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">

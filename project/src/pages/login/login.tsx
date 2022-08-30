@@ -79,7 +79,6 @@ function Login(): JSX.Element {
                   name="email"
                   placeholder="Email"
                   id="name"
-                // required=""
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -91,7 +90,6 @@ function Login(): JSX.Element {
                   name="password"
                   placeholder="Password"
                   id="password"
-                // required=""
                 />
               </div>
               <button className="login__submit form__submit button" type="submit" >

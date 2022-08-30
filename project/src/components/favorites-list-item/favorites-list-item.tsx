@@ -11,9 +11,6 @@ type PropsForFavoritesListItem = { offer: Offer };
 function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
 
   const { id, isPremium, previewImage, price, title, type, rating } = props.offer;
-  // console.log('----');
-  // console.log(props.offer);
-  // console.log('***');
   const dispatch = useAppDispatch();
   const status = 0;
   function clickHandle() {

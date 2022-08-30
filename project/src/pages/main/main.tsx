@@ -16,7 +16,6 @@ function Main(): JSX.Element {
 
   const currentCity = useAppSelector((state) => state.city);
   const originListOffers = useAppSelector((state) => state.originOffers);
-  const offers = useAppSelector((state) => state.offers);
   const currentListCity = filtredOffersByCity(originListOffers, currentCity);
 
   const [sortedOffers, setSortedOffers] = useState<ArrayOffers>(currentListCity); // отсортированные предложения (популярность, стоимость, рейтинг)
@@ -48,9 +47,8 @@ function Main(): JSX.Element {
   }
 
   useEffect(() => {
-    // console.log('use effect Sort');
     setSortedOffers(currentListCity);
-  }, [originListOffers, currentCity,/* sortType*/]);
+  }, [currentListCity, originListOffers]);
 
   if (currentListCity.length === 0) { return <div></div>; }
 
