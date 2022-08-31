@@ -12,7 +12,6 @@ function FavoritesList(props: PropsForFavoritesList): JSX.Element {
 
   favoritesOffers.forEach((offer) => {
     const array = arrayByCity.find((filtredOffers) => filtredOffers[0].city.name === offer.city.name);
-
     if (array) {
       array.push(offer);
     } else {

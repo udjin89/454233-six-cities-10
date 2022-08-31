@@ -47,7 +47,6 @@ function Main(): JSX.Element {
   }
 
   useEffect(() => {
-    // console.log('use effect Sort');
     setSortedOffers(currentListCity);
   }, [originListOffers, currentCity]);
 

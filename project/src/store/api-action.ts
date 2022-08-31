@@ -71,15 +71,15 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, { dispatch, extra: api }) => {
-    await api.get(APIRoute.Login);
-    // try {
-    // const { data } = await api.get(APIRoute.Login);
-    // dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    // dispatch(fetchFavorites());
-    // toast.success(`Hello, ${data.name} `, { position: 'top-center', });
-    // } catch {
-    // dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-    // }
+
+    try {
+      const { data } = await api.get(APIRoute.Login);
+      dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      dispatch(fetchFavorites());
+      toast.success(`Hello, ${data.name} `, { position: 'top-center', });
+    } catch {
+      dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    }
   },
 );
 
