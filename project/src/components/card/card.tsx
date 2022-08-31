@@ -1,11 +1,9 @@
 import { Offer } from '../../types/types';
-// import { MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { store } from '../../store';
 import { addFavorites, fetchPropertyAction, } from '../../store/api-action';
 import { updateNearByOffer } from '../../store/action';
 import { useAppSelector } from '../../hooks';
-import { Navigate } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
 
 type PropsForCard = {

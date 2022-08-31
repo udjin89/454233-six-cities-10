@@ -21,9 +21,9 @@ export const fetchOffersAction = createAsyncThunk<ArrayOffers, undefined, {
   async (_arg, { dispatch, getState, extra: api }) => {
     // api - настроенный экземпляр axios
     const { data } = await api.get<ArrayOffers>(APIRoute.Offers);
-    // dispatch(setDataLoadedStatus(true));
-    // dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
-    // dispatch(setDataLoadedStatus(false));
+    dispatch(setDataLoadedStatus(true));
+    dispatch(loadOffers(data));// диспатчим действие по загрузке предложений
+    dispatch(setDataLoadedStatus(false));
     return data;
   },
 );
@@ -40,11 +40,11 @@ export const fetchPropertyAction = createAsyncThunk<Offer, number, {
     toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
-    // dispatch(setDataLoadedStatus(true));
-    // dispatch(loadProperty(data));
-    // dispatch(fetchCommentsAction(_arg));
-    // dispatch(fetchPropertyNearby(_arg));
-    // dispatch(setDataLoadedStatus(false));
+    dispatch(setDataLoadedStatus(true));
+    dispatch(loadProperty(data));
+    dispatch(fetchCommentsAction(_arg));
+    dispatch(fetchPropertyNearby(_arg));
+    dispatch(setDataLoadedStatus(false));
     return data;
   },
 );
@@ -71,15 +71,15 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, { dispatch, extra: api }) => {
-    await api.get(APIRoute.Login);
-    // try {
-    // const { data } = await api.get(APIRoute.Login);
-    // dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    // dispatch(fetchFavorites());
-    // toast.success(`Hello, ${data.name} `, { position: 'top-center', });
-    // } catch {
-    // dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-    // }
+
+    try {
+      const { data } = await api.get(APIRoute.Login);
+      dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      dispatch(fetchFavorites());
+      toast.success(`Hello, ${data.name} `, { position: 'top-center', });
+    } catch {
+      dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    }
   },
 );
 
@@ -133,7 +133,7 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
   'user/sendComment',
   async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
     try {
-      const { data } = await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
+      await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
       dispatch(fetchCommentsAction(hotelId));
       toast.success(`Load coments SUCCESS, id=${hotelId}`, { position: 'top-right', });
     }
