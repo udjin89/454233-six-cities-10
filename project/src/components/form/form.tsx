@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { sendCommentAction } from '../../store/api-action';
 import { useAppDispatch } from '../../hooks';
+
 type PropsForm = { hotelId: number };
+
 
 function Form(props: PropsForm): JSX.Element {
   const dispatch = useAppDispatch();

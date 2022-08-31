@@ -18,6 +18,7 @@ function FavoritesList(props: PropsForFavoritesList): JSX.Element {
       arrayByCity.push([offer]);
     }
   });
+
   return (
     <ul className="favorites__list">
       {

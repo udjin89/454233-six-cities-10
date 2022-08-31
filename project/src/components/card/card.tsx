@@ -52,7 +52,7 @@ function Card(props: PropsForCard): JSX.Element {
 
       {isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`/offer/${id}`} onClick={() => { /*store.dispatch(fetchPropertyAction(id)); */ }}>
+        <Link to={`/offer/${id}`} onClick={() => { store.dispatch(fetchPropertyAction(id)); }}>
           <img
             className="place-card__image"
             src={previewImage}

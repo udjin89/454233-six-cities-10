@@ -36,10 +36,10 @@ export const fetchPropertyAction = createAsyncThunk<Offer, number, {
   'data/fetchProperty', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    // console.log(`fetchPropertyAction argument = ${_arg}`);
     toast.info(`Load, ${_arg}`, { position: 'top-center', });
     const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
     const { data } = await api.get<Offer>(routeProperty);
+
     dispatch(setDataLoadedStatus(true));
     dispatch(loadProperty(data));
     dispatch(fetchCommentsAction(_arg));
@@ -152,7 +152,6 @@ export const fetchPropertyNearby = createAsyncThunk<void, number, {
   'data/fetchPropertyNearby', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    // console.log(`fetchPropertyAction argument = ${_arg}`);
     const routePropertyNearby = APIRoute.Offers.concat(`/${_arg}/`).concat('nearby');
     try {
       const { data } = await api.get<ArrayOffers>(routePropertyNearby);
@@ -160,7 +159,6 @@ export const fetchPropertyNearby = createAsyncThunk<void, number, {
       toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
     }
     catch {
-      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
     }
   },
@@ -178,7 +176,6 @@ export const fetchFavorites = createAsyncThunk<void, undefined, {
       dispatch(loadFavorite(data));
     }
     catch {
-      // toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
       processErrorHandle('error');
     }
   },
@@ -193,7 +190,6 @@ export const addFavorites = createAsyncThunk<boolean, { id: number, status: numb
   async ({ id, status }, { dispatch, extra: api }) => {
     try {
       const { data } = await api.post<Offer>(APIRoute.Favorite.concat(`/${id}/${status}`), {});
-      // console.log(data, status);
       if (status) {
         dispatch(addFavorite(data));
       } else {
