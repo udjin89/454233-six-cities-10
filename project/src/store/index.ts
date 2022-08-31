@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { rootReducer } from './root-reducer';
+// import { rootReducer } from './root-reducer';
 import { createAPI } from '../services/api';
 import { redirect } from './middleware/redirect';
+import { reducer } from './reducer';
 
 export const api = createAPI();
 
@@ -10,7 +11,7 @@ export const api = createAPI();
 // Аргументом для `thunk` передадим сконфигурированный экземпляр `axios`,
 // чтобы была возможность обратиться к нему из действия.
 export const store = configureStore({
-  rootReducer,
+  reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
