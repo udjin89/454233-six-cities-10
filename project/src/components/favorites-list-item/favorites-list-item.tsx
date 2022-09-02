@@ -11,12 +11,10 @@ type PropsForFavoritesListItem = { offer: Offer };
 function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
 
   const { id, isPremium, previewImage, price, title, type, rating } = props.offer;
-  // console.log('----');
-  // console.log(props.offer);
-  // console.log('***');
+
   const dispatch = useAppDispatch();
   const status = 0;
-  function clickHandle() {
+  function handleClick() {
     dispatch(addFavorites({ id, status }));
   }
 
@@ -44,7 +42,7 @@ function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
           </div>
           <button
             className="place-card__bookmark-button place-card__bookmark-button--active button"
-            type="button" onClick={() => { clickHandle(); }}
+            type="button" onClick={() => { handleClick(); }}
           >
             <svg
               className="place-card__bookmark-icon"
@@ -58,7 +56,7 @@ function FavoritesListItem(props: PropsForFavoritesListItem): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: 15 * rating }} />
+            <span style={{ width: 15 * Math.round(rating) }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

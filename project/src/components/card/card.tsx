@@ -32,7 +32,7 @@ function Card(props: PropsForCard): JSX.Element {
     }
   }
 
-  function clickHandle() {
+  function handleClick() {
     if (isAuth === AuthorizationStatus.Auth) {
       //если isFavorite = true, то нам нужно удалить из избранного, а значит послать статус "0" и наоборот
       const status = isFavorite ? 0 : 1;
@@ -68,7 +68,7 @@ function Card(props: PropsForCard): JSX.Element {
             <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <button className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''} `} type="button" onClick={() => { clickHandle(); }}>
+          <button className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''} `} type="button" onClick={() => { handleClick(); }}>
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>
@@ -77,14 +77,14 @@ function Card(props: PropsForCard): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: 15 * rating }} />
+            <span style={{ width: 15 * Math.round(rating) }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
           <Link to={`/offer/${id}`} onClick={(evt) => { store.dispatch(fetchPropertyAction(id)); }}>{title}</Link>
         </h2>
-        <p className="place-card__type">{type}</p>
+        <p className="place-card__type"> {type.charAt(0).toUpperCase() + type.slice(1)}</p>
       </div>
     </article >
 

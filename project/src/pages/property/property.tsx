@@ -7,7 +7,6 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { Offer, Points } from '../../types/types';
-import { store } from '../../store';
 import { addFavorites, fetchPropertyAction } from '../../store/api-action';
 import CardList from '../../components/card-list/card-list';
 import { useEffect } from 'react';
@@ -32,6 +31,11 @@ function Property(): JSX.Element {
 
   const points: Points = currentPoints.map((offer: Offer) => ({ id: offer.id, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
+  if (currentProperty) {
+    points.push({ id: currentProperty.id, latitude: currentProperty.location.latitude, longitude: currentProperty.location.longitude });
+
+  }
+
   useEffect(() => {
     if (currentProperty) {
       return;
@@ -48,15 +52,16 @@ function Property(): JSX.Element {
     return (<NotFound />);
   }
 
-  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods, host, description, isFavorite, id } = currentProperty;
+  const { isPremium, price, title, type, rating, maxAdults, bedrooms, goods, host, description, isFavorite, id, images } = currentProperty;
   const { name, avatarUrl, isPro } = host;
 
-  function clickHandle() {
+  function handleClick() {
     if (isAuth === AuthorizationStatus.Auth) {
       //если isFavorite = true, то нам нужно удалить из избранного, а значит послать статус "0" и наоборот
       const status = isFavorite ? 0 : 1;
-      store.dispatch(addFavorites({ id, status }));
-      store.dispatch(fetchPropertyAction(id));
+      dispatch(addFavorites({ id, status }));
+      dispatch(fetchPropertyAction(id));
+
     }
     else {
       navigate('/login');
@@ -69,45 +74,46 @@ function Property(): JSX.Element {
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
+
             <div className="property__image-wrapper">
               <img
                 className="property__image"
-                src="img/room.jpg"
+                src={images[0]}
                 alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
-                src="img/apartment-01.jpg"
+                src={images[1]}
                 alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
-                src="img/apartment-02.jpg"
+                src={images[2]}
                 alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
-                src="img/apartment-03.jpg"
+                src={images[3]}
                 alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
-                src="img/studio-01.jpg"
+                src={images[4]}
                 alt=" studio"
               />
             </div>
             <div className="property__image-wrapper">
               <img
                 className="property__image"
-                src="img/apartment-01.jpg"
+                src={images[5]}
                 alt=" studio"
               />
             </div>
@@ -120,8 +126,8 @@ function Property(): JSX.Element {
               <h1 className="property__name">
                 {title}
               </h1>
-              <button className={`property__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''} `} type="button" onClick={() => { clickHandle(); }}>
-                <svg className="property__bookmark-icon" width={31} height={33}>
+              <button className={`property__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''} `} type="button" onClick={() => { handleClick(); }}>
+                <svg className={`property__bookmark-icon ${isFavorite ? 'place-card__bookmark-icon' : ''} `} width={31} height={33}>
                   <use xlinkHref="#icon-bookmark" />
                 </svg>
                 <span className="visually-hidden">To bookmarks</span>
@@ -129,7 +135,7 @@ function Property(): JSX.Element {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{ width: 15 * rating }} />
+                <span style={{ width: 30 * Math.round(rating) }} />
                 <span className="visually-hidden">Rating</span>
               </div>
               <span className="property__rating-value rating__value">{rating}</span>
@@ -153,7 +159,7 @@ function Property(): JSX.Element {
               <h2 className="property__inside-title">What&apos;s inside</h2>
               <ul className="property__inside-list">
                 {
-                  goods.map((item) => {
+                  goods.map((item: string) => {
                     const keyValue = `${item}-${hotelId}`;
                     return <li key={keyValue} className="property__inside-item">{item}</li>;
                   })
@@ -188,7 +194,7 @@ function Property(): JSX.Element {
           </div>
         </div>
         <section className="property__map map" >
-          <MapLeaflet centerCity={centerCity} points={points} selectedPoint={undefined} />
+          <MapLeaflet centerCity={centerCity} points={points} selectedPoint={{ id: currentProperty.id, latitude: currentProperty.location.latitude, longitude: currentProperty.location.longitude }} />
         </section>
       </section>
       <div className="container">

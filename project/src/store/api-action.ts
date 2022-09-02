@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { processErrorHandle } from '../services/process-handle-error';
-import { loadOffers, addFavorite, deleteFavorite, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby } from './action';
+import { loadOffers, saveDataUser, addFavorite, deleteFavorite, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby } from './action';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
 import { ArrayOffers, AuthData, Offer, UserData, Comments, CommentData } from '../types/types';
@@ -79,6 +79,7 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
       const { data } = await api.get(APIRoute.Login);
       dispatch(requireAuthorization(AuthorizationStatus.Auth));
       dispatch(fetchFavorites());
+      dispatch(saveDataUser(data.email));
       toast.success(`Hello, ${data.name} `, { position: 'top-center', });
     } catch {
       dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
@@ -97,6 +98,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
     const { token } = data;
     saveToken(token);
     dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    dispatch(saveDataUser(email));
     toast.success(`Hello, ${data.name}`, { position: 'top-center', });
     dispatch(redirectToRoute('/'));
   },
@@ -136,12 +138,20 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
 }>(
   'user/sendComment',
   async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
+    document.querySelectorAll('form input, form select, form textarea, form button').forEach((elem) => elem.setAttribute('disabled', 'disabled'));
     try {
       await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
       dispatch(fetchCommentsAction(hotelId));
+      const form = document.querySelector('form');
+      if (form) {
+        form.reset();
+      }
+
+      document.querySelectorAll('form input, form select, form textarea, form button').forEach((elem) => elem.removeAttribute('disabled'));
     }
     catch (error) {
       toast.info(`Load coments, ${error}`, { position: 'top-right', });
+      document.querySelectorAll('form input, form select, form textarea, form button').forEach((elem) => elem.removeAttribute('disabled'));
     }
   },
 );
@@ -198,6 +208,7 @@ export const addFavorites = createAsyncThunk<boolean, { id: number, status: numb
         dispatch(deleteFavorite(data));
       }
       dispatch(fetchFavorites());
+
       return true;
     }
     catch (error) {

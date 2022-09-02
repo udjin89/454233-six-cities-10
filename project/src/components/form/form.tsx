@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { sendCommentAction } from '../../store/api-action';
 import { useAppDispatch } from '../../hooks';
+import { MAX_LENGTH_COMMENT, MIN_LENGTH_COMMENT } from '../../const';
 
 type PropsForm = { hotelId: number };
 
@@ -14,19 +15,28 @@ function Form(props: PropsForm): JSX.Element {
     rating: 0,
     review: '',
     isDisabled: true,
+    isRating: false,
   });
 
-  function changeValue(value: number) {
+  function handleValue(value: number) {
     setFormState({
       ...formState,
       rating: value,
+      isRating: true,
     });
+
+    if (formState.review.length >= MIN_LENGTH_COMMENT && formState.review.length <= MAX_LENGTH_COMMENT) {
+      setFormState((prevState) => ({
+        ...prevState,
+        isDisabled: false,
+      }));
+    }
   }
 
   function changeText(evt: React.ChangeEvent<HTMLTextAreaElement>) {
     evt.preventDefault();
 
-    if (evt.target.textLength >= 50) {
+    if (evt.target.textLength >= MIN_LENGTH_COMMENT && evt.target.textLength <= MAX_LENGTH_COMMENT && formState.isRating) {
 
       setFormState((prevState) => ({
         ...prevState,
@@ -49,6 +59,11 @@ function Form(props: PropsForm): JSX.Element {
 
   const onSubmit = (comment: string, rating: number) => {
     dispatch(sendCommentAction({ hotelId, comment, rating }));
+
+    setFormState((prevState) => ({
+      ...prevState,
+      review: '',
+    }));
   };
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
@@ -71,7 +86,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={5}
           id="5-stars"
           type="radio"
-          onChange={() => changeValue(5)}
+          onChange={() => handleValue(5)}
         />
         <label
           htmlFor="5-stars"
@@ -88,7 +103,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={4}
           id="4-stars"
           type="radio"
-          onChange={() => changeValue(4)}
+          onChange={() => handleValue(4)}
         />
         <label
           htmlFor="4-stars"
@@ -105,7 +120,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={3}
           id="3-stars"
           type="radio"
-          onChange={() => changeValue(3)}
+          onChange={() => handleValue(3)}
         />
         <label
           htmlFor="3-stars"
@@ -122,7 +137,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={2}
           id="2-stars"
           type="radio"
-          onChange={() => changeValue(2)}
+          onChange={() => handleValue(2)}
         />
         <label
           htmlFor="2-stars"
@@ -139,7 +154,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={1}
           id="1-star"
           type="radio"
-          onChange={() => changeValue(1)}
+          onChange={() => handleValue(1)}
         />
         <label
           htmlFor="1-star"

@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changeSortTypeStore } from '../../store/action';
 
 type PropsForSort = {
   changeSortTypeHandler: (sortType: string) => void;
@@ -6,24 +8,31 @@ type PropsForSort = {
 
 function Sort(props: PropsForSort): JSX.Element {
   const [openSortMenu, setOpenSortMenu] = useState(false); //состояние меню (открыто/закрыто)
-  const [currentSortType, setCurrentSortType] = useState('Popular');
-
+  const currentSortType = useAppSelector((state) => state.sortType);
   const { changeSortTypeHandler } = props;
+  const dispatch = useAppDispatch();
 
   function changeSortType(sortType: string) {
     changeSortTypeHandler(sortType);
-    setCurrentSortType(sortType);
+    dispatch(changeSortTypeStore(sortType));
   }
 
   function changeOpenSortMenu(state: boolean) {
     setOpenSortMenu(state);
   }
 
+  const sortTypes = new Map([
+    ['Popular', 'Popular'],
+    ['PriceLowToHigh', 'Price: low to high'],
+    ['PriceHighToLow', 'Price: high to low'],
+    ['TopRateFirst', 'Top rated first'],
+  ]);
+
   return (
     <form className="places__sorting" action="#" method="get">
-      <span className="places__sorting-caption">Sort by</span>
+      <span className="places__sorting-caption">Sort by &nbsp;&nbsp;&nbsp;</span>
       <span className="places__sorting-type" onClick={(evt) => { changeOpenSortMenu(!openSortMenu); }}>
-        {currentSortType}
+        {sortTypes.get(currentSortType)}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>

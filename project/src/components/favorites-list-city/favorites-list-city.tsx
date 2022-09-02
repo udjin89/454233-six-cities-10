@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { ArrayOffers } from '../../types/types';
 import FavoritesListItem from '../favorites-list-item/favorites-list-item';
@@ -9,9 +8,6 @@ function FavoritesListByCity(props: PropsForFavoritesList): JSX.Element {
 
   const favoritesOffersByCity: ArrayOffers = props.offers;
   const currentCity = props.offers[0].city.name;
-  // console.log(props.offers[0].city);
-  // console.log(props.offer);
-  // console.log('***');
 
   return (
 

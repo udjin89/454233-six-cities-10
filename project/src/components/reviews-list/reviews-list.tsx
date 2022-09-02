@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Comments } from '../../types/types';
+import { MAX_COMMENT } from '../../const';
 import ReviewsItem from '../reviews-item/reviews-item';
 
 type PropsReview = { reviews: Comments };
@@ -9,7 +10,9 @@ function ReviewsList(props: PropsReview): JSX.Element {
   const countReviews = props.reviews.length;
   const reviewsList = props.reviews;
 
-  const reviewsListSort = [...reviewsList].sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  let reviewsListSort = [...reviewsList].sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+
+  reviewsListSort = reviewsListSort.slice(0, MAX_COMMENT);
 
   return (
     <Fragment>

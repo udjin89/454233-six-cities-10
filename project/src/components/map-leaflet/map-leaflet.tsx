@@ -30,7 +30,6 @@ function MapLeaflet(props: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, centerCity);
-  // console.log(selectedPoint);
   useEffect(() => {
 
     const layerGroup = leaflet.layerGroup();
@@ -63,9 +62,7 @@ function MapLeaflet(props: MapProps): JSX.Element {
   }, [map, points, selectedPoint, centerCity]);
 
   return (
-    // <section className="cities__map">
     <div className="map" style={{ height: '100%' }} ref={mapRef}></div>
-    // </section>
   );
 }
 

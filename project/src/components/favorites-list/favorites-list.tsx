@@ -22,7 +22,10 @@ function FavoritesList(props: PropsForFavoritesList): JSX.Element {
   return (
     <ul className="favorites__list">
       {
-        arrayByCity.map((offers, idx) => <FavoritesListByCity key={`index-${offers[idx].id}`} offers={offers} />)
+        arrayByCity.map((offers, idx) => {
+          const keyValue = `index-${idx}`;
+          return < FavoritesListByCity key={keyValue} offers={offers} />;
+        })
       }
 
     </ul>

@@ -7,8 +7,7 @@ function Layout(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const { authorizationStatus, favorites } = useAppSelector((state) => state);
-
+  const { authorizationStatus, favorites, userLogin } = useAppSelector((state) => state);
   const favoritesCount = favorites.length;
 
   const isLogin = (authorizationStatus === AuthorizationStatus.Auth);
@@ -42,7 +41,7 @@ function Layout(): JSX.Element {
                       <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                         <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                         <span className="header__user-name user__name">
-                          Oliver.conner@gmail.com
+                          {userLogin}
                         </span>
                         <span className="header__favorite-count">{favoritesCount}</span>
                       </Link>

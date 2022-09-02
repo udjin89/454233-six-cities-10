@@ -19,7 +19,6 @@ store.dispatch(fetchOffersAction());
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <ErrorMessage /> */}
       <ToastContainer />
       <App />
     </Provider>

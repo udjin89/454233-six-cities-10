@@ -2,6 +2,7 @@ import CardList from '../../components/card-list/card-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
 import CityList from '../../components/city-list/city-list';
 import Sort from '../../components/sort/sort';
+import MainEmpty from '../../components/main-empty/main-empty';
 import { useEffect, useState } from 'react';
 import { Point, Offer, Points, ArrayOffers } from '../../types/types';
 import { CITY_LIST } from '../../const';
@@ -50,7 +51,7 @@ function Main(): JSX.Element {
     setSortedOffers(currentListCity);
   }, [originListOffers, currentCity]);
 
-  if (currentListCity.length === 0) { return <div></div>; }
+  if (currentListCity.length === 0) { return <MainEmpty />; }
 
   const centerCity = {
     title: currentListCity[0]?.city.name || 'Paris',

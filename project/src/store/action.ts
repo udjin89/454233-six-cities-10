@@ -34,3 +34,7 @@ export const addFavorite = createAction<Offer>('data/addFavorite');
 export const deleteFavorite = createAction<Offer>('data/deleteFavorite');
 
 export const updateNearByOffer = createAction<Offer>('data/updateNearByOffer');
+
+export const saveDataUser = createAction<string>('data/saveDataUser');
+
+export const changeSortTypeStore = createAction<string>('data/changeSortType');

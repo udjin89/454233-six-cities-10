@@ -36,7 +36,6 @@ type Offer = {
 type ArrayOffers = Offer[];
 
 type City = {
-  // title: string;
   latitude: number;
   longitude: number;
   zoom: number;
@@ -83,6 +82,5 @@ type CommentData = {
   comment: string,
   rating: number,
 }
-type ErrorType = unknown;
 
-export type { Offer, ArrayOffers, City, Point, Points, Comment, Comments, AuthData, UserData, ErrorType, CommentData };
+export type { Offer, ArrayOffers, City, Point, Points, Comment, Comments, AuthData, UserData, CommentData };

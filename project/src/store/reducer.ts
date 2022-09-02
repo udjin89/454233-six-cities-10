@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ArrayOffers, Comments, Offer } from '../types/types';
-import { changeCity, updateNearByOffer, deleteFavorite, loadFavorite, addFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments } from './action';
+import { changeCity, changeSortTypeStore, updateNearByOffer, deleteFavorite, loadFavorite, addFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments, saveDataUser } from './action';
 import { filtredOffersByCity } from '../utils/utils';
 import { AuthorizationStatus } from '../const';
 
@@ -16,6 +16,8 @@ type InitialState = {
   comments: Comments,
   nearby: ArrayOffers,
   favorites: ArrayOffers,
+  userLogin: string,
+  sortType: string,
 };
 
 const initialState: InitialState = {
@@ -29,6 +31,8 @@ const initialState: InitialState = {
   comments: [],
   nearby: [],
   favorites: [],
+  userLogin: '',
+  sortType: 'Popular',
 };
 
 // reducer - функция
@@ -40,6 +44,10 @@ const reducer = createReducer(initialState, (builder) => {
     //изменение города
     .addCase(changeCity, (state, payload) => {
       state.city = payload.payload;
+      state.sortType = 'Popular';
+    })
+    .addCase(changeSortTypeStore, (state, payload) => {
+      state.sortType = payload.payload;
     })
     //Действие для заполнения списка предложений должно поместить в хранилище все предложения по аренде
     .addCase(putListOffers, (state, payload) => {
@@ -101,6 +109,9 @@ const reducer = createReducer(initialState, (builder) => {
         }
       });
       state.nearby = offers;
+    })
+    .addCase(saveDataUser, (state, payload) => {
+      state.userLogin = payload.payload;
     });
 });
 
