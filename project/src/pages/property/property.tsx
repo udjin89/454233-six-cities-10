@@ -3,12 +3,14 @@ import Form from '../../components/form/form';
 import NotFound from '../notfound/notfound';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import MapLeaflet from '../../components/map-leaflet/map-leaflet';
-import { useAppSelector } from '../../hooks';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { Offer, Points } from '../../types/types';
 import { store } from '../../store';
 import { addFavorites, fetchPropertyAction } from '../../store/api-action';
 import CardList from '../../components/card-list/card-list';
+import { useEffect } from 'react';
 
 function Property(): JSX.Element {
 
@@ -17,19 +19,32 @@ function Property(): JSX.Element {
   // можно найти его в массиве
   const params = useParams();
   const hotelId = Number(params.id);
-
+  const isDataLoaded = useAppSelector((state) => state.isDataLoaded);
   const currentProperty = useAppSelector((state) => state.property);
   const currentComments = useAppSelector((state) => state.comments);
   const currentPoints = useAppSelector((state) => state.nearby);
   const isAuth = useAppSelector((state) => state.authorizationStatus);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
 
   const centerCity = currentProperty ? currentProperty.location : { latitude: 52.370216, longitude: 4.895168, zoom: 11 };
 
   const points: Points = currentPoints.map((offer: Offer) => ({ id: offer.id, latitude: offer.location.latitude, longitude: offer.location.longitude }));
 
-  if (currentProperty === null) {
+  useEffect(() => {
+    if (currentProperty) {
+      return;
+    }
+
+    dispatch(fetchPropertyAction(hotelId));
+
+  }, [currentProperty, isDataLoaded]);
+
+  if (isDataLoaded) {
+    return <LoadingScreen />;
+  }
+  if (!currentProperty) {
     return (<NotFound />);
   }
 

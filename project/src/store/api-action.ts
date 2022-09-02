@@ -9,7 +9,6 @@ import { AppDispatch, State } from '../types/state';
 import { store } from './index';
 import { toast } from 'react-toastify';
 
-
 //Создаем асинхронное действие с помощью createAsyncThunk
 // createAsyncThunk<...> - передаем необходимую инфу о типах
 export const fetchOffersAction = createAsyncThunk<ArrayOffers, undefined, {
@@ -28,7 +27,7 @@ export const fetchOffersAction = createAsyncThunk<ArrayOffers, undefined, {
   },
 );
 
-export const fetchPropertyAction = createAsyncThunk<Offer, number, {
+export const fetchPropertyAction = createAsyncThunk<void, number, {
   dispatch: AppDispatch, //ссылка на dispatch
   state: State,
   extra: AxiosInstance, //что приходит в extra аргументе
@@ -36,16 +35,21 @@ export const fetchPropertyAction = createAsyncThunk<Offer, number, {
   'data/fetchProperty', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
     // api - настроенный экземпляр axios
-    toast.info(`Load, ${_arg}`, { position: 'top-center', });
-    const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
-    const { data } = await api.get<Offer>(routeProperty);
 
     dispatch(setDataLoadedStatus(true));
-    dispatch(loadProperty(data));
-    dispatch(fetchCommentsAction(_arg));
-    dispatch(fetchPropertyNearby(_arg));
-    dispatch(setDataLoadedStatus(false));
-    return data;
+    const routeProperty = APIRoute.Offers.concat(`/${_arg}`);
+    try {
+      const { data } = await api.get<Offer>(routeProperty);
+      dispatch(loadProperty(data));
+      dispatch(fetchCommentsAction(_arg));
+      dispatch(fetchPropertyNearby(_arg));
+      dispatch(setDataLoadedStatus(false));
+    }
+    catch (error) {
+      toast.error(`${error}`);
+      dispatch(setDataLoadedStatus(false));
+      dispatch(redirectToRoute('/404'));
+    }
   },
 );
 
@@ -56,7 +60,6 @@ export const fetchCommentsAction = createAsyncThunk<void, number, {
 }>(
   'data/fetchComments', // передаем название действия
   async (_arg, { dispatch, extra: api }) => {
-    toast.info(`Load coments, ${_arg}`, { position: 'top-right', });
     const routeProperty = APIRoute.Comments.concat(`/${_arg}`);
     const { data } = await api.get<Comments>(routeProperty);
     dispatch(loadComments(data));
@@ -110,6 +113,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete('/logout');
     dropToken();
     dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    dispatch(redirectToRoute('/'));
   },
 );
 
@@ -135,7 +139,6 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
     try {
       await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
       dispatch(fetchCommentsAction(hotelId));
-      toast.success(`Load coments SUCCESS, id=${hotelId}`, { position: 'top-right', });
     }
     catch (error) {
       toast.info(`Load coments, ${error}`, { position: 'top-right', });
@@ -156,7 +159,6 @@ export const fetchPropertyNearby = createAsyncThunk<void, number, {
     try {
       const { data } = await api.get<ArrayOffers>(routePropertyNearby);
       dispatch(loadPropertyNearby(data));
-      toast.info(`Load Offers NearBY, id=${_arg}`, { position: 'top-right', });
     }
     catch {
       processErrorHandle('error');
@@ -196,7 +198,6 @@ export const addFavorites = createAsyncThunk<boolean, { id: number, status: numb
         dispatch(deleteFavorite(data));
       }
       dispatch(fetchFavorites());
-      toast.success(`Add favorite SUCCESS, id=${id} status = ${status}`, { position: 'top-left', });
       return true;
     }
     catch (error) {

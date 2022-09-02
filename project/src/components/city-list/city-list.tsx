@@ -15,14 +15,15 @@ function CityList(props: { cityList: string[] }): JSX.Element {
 
         return (
           <li key={keyValue} className="locations__item" >
-            <button className={` ${activeCity} locations__item-link tabs__item`}
+            <a className={` ${activeCity} locations__item-link tabs__item`}
+              href="#"
               onClick={() => {
                 dispatch(changeCity(city)); // диспатчим действие changeCity
                 dispatch(putListOffers(city));
               }}
             >
               <span>{city}</span>
-            </button>
+            </a>
           </li>);
       })}
     </ul>
