@@ -85,18 +85,27 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(addFavorite, (state, payload) => {
       const offers = [...state.originOffers];
+      const property = state.property;
       offers.forEach((offer) => {
         if (offer.id === payload.payload.id) {
           offer.isFavorite = payload.payload.isFavorite;
+          if (property) {
+            property.isFavorite = payload.payload.isFavorite;
+          }
+
         }
       });
       state.originOffers = offers;
     })
     .addCase(deleteFavorite, (state, payload) => {
       const offers = [...state.originOffers];
+      const property = state.property;
       offers.forEach((offer) => {
         if (offer.id === payload.payload.id) {
           offer.isFavorite = payload.payload.isFavorite;
+          if (property) {
+            property.isFavorite = payload.payload.isFavorite;
+          }
         }
       });
       state.originOffers = offers;

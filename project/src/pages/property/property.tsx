@@ -60,8 +60,6 @@ function Property(): JSX.Element {
       //если isFavorite = true, то нам нужно удалить из избранного, а значит послать статус "0" и наоборот
       const status = isFavorite ? 0 : 1;
       dispatch(addFavorites({ id, status }));
-      dispatch(fetchPropertyAction(id));
-
     }
     else {
       navigate('/login');

@@ -145,9 +145,11 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
       const form = document.querySelector('form');
       if (form) {
         form.reset();
+
       }
 
-      document.querySelectorAll('form input, form select, form textarea, form button').forEach((elem) => elem.removeAttribute('disabled'));
+      document.querySelectorAll('form input, form select, form textarea').forEach((elem) => elem.removeAttribute('disabled'));
+      document.querySelectorAll('form button').forEach((elem) => elem.setAttribute('disabled', ''));
     }
     catch (error) {
       toast.info(`Load coments, ${error}`, { position: 'top-right', });
@@ -204,6 +206,7 @@ export const addFavorites = createAsyncThunk<boolean, { id: number, status: numb
       const { data } = await api.post<Offer>(APIRoute.Favorite.concat(`/${id}/${status}`), {});
       if (status) {
         dispatch(addFavorite(data));
+        // console.log(data)
       } else {
         dispatch(deleteFavorite(data));
       }

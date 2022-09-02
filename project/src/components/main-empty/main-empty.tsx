@@ -1,5 +1,4 @@
 
-
 function MainEmpty(): JSX.Element {
   return (
     <main className="page__main page__main--index page__main--index-empty">
