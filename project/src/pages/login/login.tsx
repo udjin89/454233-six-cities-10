@@ -2,10 +2,11 @@ import { useRef, FormEvent } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-action';
+import { changeCity } from '../../store/action';
 import { AuthData } from '../../types/types';
 import { processErrorHandle } from '../../services/process-handle-error';
-import { AuthorizationStatus } from '../../const';
-
+import { AuthorizationStatus, CITY_LIST } from '../../const';
+import { arrayRandElement } from '../../utils/utils';
 
 function Login(): JSX.Element {
 
@@ -14,6 +15,8 @@ function Login(): JSX.Element {
 
   const { authorizationStatus } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+
+  const randomCity = arrayRandElement(CITY_LIST);
 
   if (authorizationStatus === AuthorizationStatus.Auth) {
 
@@ -42,9 +45,11 @@ function Login(): JSX.Element {
       }
       else { processErrorHandle('Password incorrect!'); }
     }
-
-
   };
+
+  function handleClick() {
+    dispatch(changeCity(randomCity));
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -79,7 +84,6 @@ function Login(): JSX.Element {
                   name="email"
                   placeholder="Email"
                   id="name"
-                // required=""
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -91,7 +95,7 @@ function Login(): JSX.Element {
                   name="password"
                   placeholder="Password"
                   id="password"
-                // required=""
+
                 />
               </div>
               <button className="login__submit form__submit button" type="submit" >
@@ -101,8 +105,8 @@ function Login(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to="/">
-                <span>Paris</span>
+              <Link className="locations__item-link" to="/" onClick={handleClick}>
+                <span>{randomCity}</span>
               </Link>
             </div>
           </section>

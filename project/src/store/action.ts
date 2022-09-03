@@ -38,3 +38,5 @@ export const updateNearByOffer = createAction<Offer>('data/updateNearByOffer');
 export const saveDataUser = createAction<string>('data/saveDataUser');
 
 export const changeSortTypeStore = createAction<string>('data/changeSortType');
+
+export const changeFormState = createAction<'disabled' | 'error' | 'initial'>('state/changeFormState');

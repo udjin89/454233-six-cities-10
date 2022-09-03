@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { processErrorHandle } from '../services/process-handle-error';
-import { loadOffers, saveDataUser, addFavorite, deleteFavorite, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby } from './action';
+import { loadOffers, saveDataUser, addFavorite, deleteFavorite, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby, changeFormState } from './action';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
 import { ArrayOffers, AuthData, Offer, UserData, Comments, CommentData } from '../types/types';
@@ -94,13 +94,18 @@ export const loginAction = createAsyncThunk<void, AuthData, {
 }>(
   'user/login',
   async ({ login: email, password }, { dispatch, extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
-    const { token } = data;
-    saveToken(token);
-    dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    dispatch(saveDataUser(email));
-    toast.success(`Hello, ${data.name}`, { position: 'top-center', });
-    dispatch(redirectToRoute('/'));
+    try {
+      const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
+      const { token } = data;
+      saveToken(token);
+      dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      dispatch(saveDataUser(email));
+      toast.success(`Hello, ${data.name}`, { position: 'top-center', });
+      dispatch(redirectToRoute('/'));
+    }
+    catch (error) {
+      toast.error(` ${error}`, { position: 'top-right', });
+    }
   },
 );
 
@@ -138,22 +143,16 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
 }>(
   'user/sendComment',
   async ({ hotelId, comment, rating }, { dispatch, extra: api }) => {
-    document.querySelectorAll('form input, form select, form textarea, form button').forEach((elem) => elem.setAttribute('disabled', 'disabled'));
+    dispatch(changeFormState('disabled'));
     try {
       await api.post<UserData>(APIRoute.Comments.concat(`/${hotelId}`), { comment, rating });
       dispatch(fetchCommentsAction(hotelId));
-      const form = document.querySelector('form');
-      if (form) {
-        form.reset();
+      dispatch(changeFormState('initial'));
 
-      }
-
-      document.querySelectorAll('form input, form select, form textarea').forEach((elem) => elem.removeAttribute('disabled'));
-      document.querySelectorAll('form button').forEach((elem) => elem.setAttribute('disabled', ''));
     }
     catch (error) {
       toast.info(`Load coments, ${error}`, { position: 'top-right', });
-      document.querySelectorAll('form input, form select, form textarea, form button').forEach((elem) => elem.removeAttribute('disabled'));
+      dispatch(changeFormState('error'));
     }
   },
 );

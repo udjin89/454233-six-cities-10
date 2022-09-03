@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { sendCommentAction } from '../../store/api-action';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { MAX_LENGTH_COMMENT, MIN_LENGTH_COMMENT } from '../../const';
 
 type PropsForm = { hotelId: number };
@@ -8,13 +8,15 @@ type PropsForm = { hotelId: number };
 
 function Form(props: PropsForm): JSX.Element {
   const dispatch = useAppDispatch();
+  const formState5 = useAppSelector((state) => state.formState);
 
   const { hotelId } = props;
 
   const [formState, setFormState] = useState({
     rating: 0,
     review: '',
-    isDisabled: true,
+    isDisabledButton: true,
+    isDisabledInput: false,
     isRating: false,
   });
 
@@ -28,7 +30,7 @@ function Form(props: PropsForm): JSX.Element {
     if (formState.review.length >= MIN_LENGTH_COMMENT && formState.review.length <= MAX_LENGTH_COMMENT) {
       setFormState((prevState) => ({
         ...prevState,
-        isDisabled: false,
+        isDisabledButton: false,
       }));
     }
   }
@@ -41,7 +43,7 @@ function Form(props: PropsForm): JSX.Element {
       setFormState((prevState) => ({
         ...prevState,
         review: evt.target.value,
-        isDisabled: false,
+        isDisabledButton: false,
       }));
 
     }
@@ -50,7 +52,7 @@ function Form(props: PropsForm): JSX.Element {
       setFormState((prevState) => ({
         ...prevState,
         review: evt.target.value,
-        isDisabled: true,
+        isDisabledButton: true,
       }));
 
     }
@@ -60,19 +62,38 @@ function Form(props: PropsForm): JSX.Element {
   const onSubmit = (comment: string, rating: number) => {
     dispatch(sendCommentAction({ hotelId, comment, rating }));
 
-    setFormState((prevState) => ({
-      ...prevState,
-      review: '',
-    }));
   };
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     onSubmit(formState.review, formState.rating);
+    // const form = evt.target;
+    // form.reset();
+    // console.log(evt);
 
   };
 
+  useEffect(() => {
+    if (formState5 === 'disabled') {
+      setFormState((prevState) => ({
+        ...prevState,
+        isDisabledInput: true,
+        isDisabledButton: true,
+      }));
+    }
+    if (formState5 === 'initial') {
+      setFormState((prevState) => ({
+        rating: 0,
+        // ...prevState,
+        review: '',
+        isDisabledButton: true,
+        isDisabledInput: false,
+        isRating: false,
+      }));
+    }
+
+  }, [formState5]);
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
@@ -87,6 +108,7 @@ function Form(props: PropsForm): JSX.Element {
           id="5-stars"
           type="radio"
           onChange={() => handleValue(5)}
+          disabled={formState.isDisabledInput}
         />
         <label
           htmlFor="5-stars"
@@ -104,6 +126,7 @@ function Form(props: PropsForm): JSX.Element {
           id="4-stars"
           type="radio"
           onChange={() => handleValue(4)}
+          disabled={formState.isDisabledInput}
         />
         <label
           htmlFor="4-stars"
@@ -121,6 +144,7 @@ function Form(props: PropsForm): JSX.Element {
           id="3-stars"
           type="radio"
           onChange={() => handleValue(3)}
+          disabled={formState.isDisabledInput}
         />
         <label
           htmlFor="3-stars"
@@ -138,6 +162,7 @@ function Form(props: PropsForm): JSX.Element {
           id="2-stars"
           type="radio"
           onChange={() => handleValue(2)}
+          disabled={formState.isDisabledInput}
         />
         <label
           htmlFor="2-stars"
@@ -155,6 +180,7 @@ function Form(props: PropsForm): JSX.Element {
           id="1-star"
           type="radio"
           onChange={() => handleValue(1)}
+          disabled={formState.isDisabledInput}
         />
         <label
           htmlFor="1-star"
@@ -173,6 +199,7 @@ function Form(props: PropsForm): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formState.review}
         onChange={changeText}
+        disabled={formState.isDisabledInput}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -184,7 +211,7 @@ function Form(props: PropsForm): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={formState.isDisabled}
+          disabled={formState.isDisabledButton}
         >
           Submit
         </button>

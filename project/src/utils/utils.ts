@@ -27,4 +27,9 @@ function deleteFavoriteOffer(favoritesOffers: ArrayOffers, favoriteItem: Offer) 
   return favoritesOffers.filter((offer) => offer.id !== favoriteItem.id);
 }
 
-export { filtredOffersByCity, sortByLowToHigh, sortByHighToLow, sortByRate, deleteFavoriteOffer };
+function arrayRandElement(array: string[]) {
+  const rand = Math.floor(Math.random() * array.length);
+  return array[rand];
+}
+
+export { filtredOffersByCity, sortByLowToHigh, sortByHighToLow, sortByRate, deleteFavoriteOffer, arrayRandElement };

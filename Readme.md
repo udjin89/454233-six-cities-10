@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Евгений Ильин](https://up.htmlacademy.ru/react/10/user/454233).
-* Наставник: [Александр Тимоновский](https://htmlacademy.ru/profile/id768125).
+* Наставник: [Иван Кривонос](https://htmlacademy.ru/profile/id1311037).
 
 ---
 
