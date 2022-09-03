@@ -122,6 +122,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     dispatch(resetState());
     dropToken();
     dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    dispatch(fetchOffersAction());
     dispatch(redirectToRoute('/'));
 
   },
