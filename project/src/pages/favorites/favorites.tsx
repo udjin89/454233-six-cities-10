@@ -5,10 +5,6 @@ import { useAppSelector } from '../../hooks';
 function Favorites(): JSX.Element {
 
   const currentFavorites = useAppSelector((state) => state.favorites);
-  //заглушка ниже
-  // const offers = useAppSelector((state) => state.offers);
-
-  // const offers =
 
   if (currentFavorites.length === 0) {
     return (

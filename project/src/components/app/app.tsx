@@ -30,7 +30,6 @@ function App(): JSX.Element {
   return (
     //оборачиваем для работы навигации из реакта
     // Layout - содержит общие элементы для всех страниц приложения(например header, footer)
-    //
     // index - значит корневой элемент по умолчанию
     // path='*' - значит все пути, которые не заданы
     <HistoryRouter history={browserHistory}>
