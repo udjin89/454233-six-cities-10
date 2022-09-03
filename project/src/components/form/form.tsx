@@ -35,7 +35,7 @@ function Form(props: PropsForm): JSX.Element {
     }
   }
 
-  function changeText(evt: React.ChangeEvent<HTMLTextAreaElement>) {
+  function handleChangeText(evt: React.ChangeEvent<HTMLTextAreaElement>) {
     evt.preventDefault();
 
     if (evt.target.textLength >= MIN_LENGTH_COMMENT && evt.target.textLength <= MAX_LENGTH_COMMENT && formState.isRating) {
@@ -204,7 +204,7 @@ function Form(props: PropsForm): JSX.Element {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formState.review}
-        onChange={changeText}
+        onChange={handleChangeText}
         disabled={formState.isDisabledInput}
       />
       <div className="reviews__button-wrapper">
