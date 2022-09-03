@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { processErrorHandle } from '../services/process-handle-error';
-import { loadOffers, saveDataUser, addFavorite, deleteFavorite, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby, changeFormState } from './action';
+import { loadOffers, saveDataUser, addFavorite, deleteFavorite, loadFavorite, requireAuthorization, setError, setDataLoadedStatus, redirectToRoute, loadProperty, loadComments, loadPropertyNearby, changeFormState, resetState } from './action';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
 import { ArrayOffers, AuthData, Offer, UserData, Comments, CommentData } from '../types/types';
@@ -101,6 +101,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
       dispatch(requireAuthorization(AuthorizationStatus.Auth));
       dispatch(saveDataUser(email));
       toast.success(`Hello, ${data.name}`, { position: 'top-center', });
+      dispatch(fetchFavorites());
       dispatch(redirectToRoute('/'));
     }
     catch (error) {
@@ -118,9 +119,11 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   'user/logout',
   async (_arg, { dispatch, extra: api }) => {
     await api.delete('/logout');
+    dispatch(resetState());
     dropToken();
     dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     dispatch(redirectToRoute('/'));
+
   },
 );
 
@@ -205,7 +208,6 @@ export const addFavorites = createAsyncThunk<boolean, { id: number, status: numb
       const { data } = await api.post<Offer>(APIRoute.Favorite.concat(`/${id}/${status}`), {});
       if (status) {
         dispatch(addFavorite(data));
-        // console.log(data)
       } else {
         dispatch(deleteFavorite(data));
       }

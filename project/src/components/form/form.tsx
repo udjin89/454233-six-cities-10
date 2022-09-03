@@ -66,12 +66,7 @@ function Form(props: PropsForm): JSX.Element {
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-
     onSubmit(formState.review, formState.rating);
-    // const form = evt.target;
-    // form.reset();
-    // console.log(evt);
-
   };
 
   useEffect(() => {
@@ -85,11 +80,17 @@ function Form(props: PropsForm): JSX.Element {
     if (formState5 === 'initial') {
       setFormState((prevState) => ({
         rating: 0,
-        // ...prevState,
         review: '',
         isDisabledButton: true,
         isDisabledInput: false,
         isRating: false,
+      }));
+    }
+    if (formState5 === 'error') {
+      setFormState((prevState) => ({
+        ...prevState,
+        isDisabledInput: false,
+        isDisabledButton: false,
       }));
     }
 
@@ -107,6 +108,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={5}
           id="5-stars"
           type="radio"
+          checked={5 === formState.rating}
           onChange={() => handleValue(5)}
           disabled={formState.isDisabledInput}
         />
@@ -125,6 +127,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={4}
           id="4-stars"
           type="radio"
+          checked={4 === formState.rating}
           onChange={() => handleValue(4)}
           disabled={formState.isDisabledInput}
         />
@@ -143,6 +146,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={3}
           id="3-stars"
           type="radio"
+          checked={3 === formState.rating}
           onChange={() => handleValue(3)}
           disabled={formState.isDisabledInput}
         />
@@ -161,6 +165,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={2}
           id="2-stars"
           type="radio"
+          checked={2 === formState.rating}
           onChange={() => handleValue(2)}
           disabled={formState.isDisabledInput}
         />
@@ -179,6 +184,7 @@ function Form(props: PropsForm): JSX.Element {
           defaultValue={1}
           id="1-star"
           type="radio"
+          checked={1 === formState.rating}
           onChange={() => handleValue(1)}
           disabled={formState.isDisabledInput}
         />

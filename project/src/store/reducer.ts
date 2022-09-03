@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ArrayOffers, Comments, Offer } from '../types/types';
-import { changeCity, changeSortTypeStore, updateNearByOffer, deleteFavorite, loadFavorite, addFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments, saveDataUser, changeFormState } from './action';
+import { changeCity, changeSortTypeStore, resetState, updateNearByOffer, deleteFavorite, loadFavorite, addFavorite, loadOffers, putListOffers, putSortOffers, requireAuthorization, setError, setDataLoadedStatus, loadPropertyNearby, loadProperty, loadComments, saveDataUser, changeFormState } from './action';
 import { filtredOffersByCity } from '../utils/utils';
 import { AuthorizationStatus } from '../const';
 
@@ -126,6 +126,17 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(changeFormState, (state, payload) => {
       state.formState = payload.payload;
+    })
+    .addCase(resetState, (state) => {
+
+      state.isDataLoaded = false;
+      state.error = null;
+      state.property = null;
+      state.comments = [];
+      state.nearby = [];
+      state.favorites = [];
+      state.userLogin = '';
+      state.sortType = 'Popular';
     });
 });
 

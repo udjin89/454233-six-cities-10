@@ -40,3 +40,5 @@ export const saveDataUser = createAction<string>('data/saveDataUser');
 export const changeSortTypeStore = createAction<string>('data/changeSortType');
 
 export const changeFormState = createAction<'disabled' | 'error' | 'initial'>('state/changeFormState');
+
+export const resetState = createAction('data/resetState');
